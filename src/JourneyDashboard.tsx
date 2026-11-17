@@ -7,7 +7,7 @@ import './dossier.css'
 const LABELS: Record<ExperienceId, string> = {
   'ai-apology': 'AI apology', 'the-bank-call': 'Bank call', 'only-two-left': 'Hotel pressure',
   'the-third-cancellation': 'The friend', 'gut-vs-data': 'Gut vs. Data',
-  'the-better-deal': 'Better deal', 'the-family-text': 'Family text',
+  'the-better-deal': 'Better deal', 'the-family-text': 'Family text', 'the-screenshot': 'The Screenshot',
 }
 
 type JourneyStats = ReturnType<typeof calculateJourney>
