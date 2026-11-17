@@ -2,6 +2,12 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
+## Interactive v0.4 - local progress and levels
+
+The public site now includes an optional, private **Your Journey** progression panel: levels **0 to 10**, 120 discovery XP per *unique* completed experience, progress toward the next rank, and a collection of seven completed experiences. The level reflects participation in the site, **not tested skills, professional competence or a certificate**.
+
+Progress is stored only in browser `localStorage` under `second-look-lab:journey:v1`. It does not require an account or backend and is never sent to a server. Replay doesn't add XP; a reset button clears local progress after confirmation. Different devices/browsers have different progress. Some high levels are intentionally not reachable until more original experiences are published.
+
 ## Interactive v0.3
 
 New **The Family Text** experience: a fictional, branching SMS story with a simulated phone screen, an initial decision, new evidence, an independent-verification choice and contextual feedback. The interface never asks for real personal data or transfers money. It is shown as a featured immersive story on the homepage.
@@ -26,7 +32,7 @@ Other features:
 - Different first and second questions where appropriate; choices are not compared mechanically when their meanings differ.
 - Meaningful result recap, next-experience button and source link for the statistics game.
 - Stories and booking interfaces are **fictional simulations**. No fake reader testimonials or community statistics.
-- All interactions are local to the browser. There are **no votes saved, user accounts, real poll data, cookies or trackers**.
+- All interactions are local to the browser. There are **no decision answers saved, user accounts, real poll data, analytics cookies or trackers**. Only the local list of uniquely completed experiences is stored for leveling.
 
 **Source for Gut vs. Data:** Pew Research Center, [Americans' Social Media Use 2025](https://www.pewresearch.org/internet/2025/11/20/americans-social-media-use-2025/), survey February 5 - June 18, 2025. Reported Facebook use is **not** the same as daily use.
 
@@ -43,12 +49,12 @@ Vite builds a static site; `src/styles.css` retains the original editorial styli
 
 ### Automated verification and deployment
 
-- `.github/workflows/verify.yml` runs the TypeScript/Vite build and 8 scripted Chromium browser journeys (desktop and mobile) on pull requests. These tests check software behavior; they are **not** human usability feedback.
+- `.github/workflows/verify.yml` runs the TypeScript/Vite build and scripted Chromium browser journeys including progress persistence and replay protection (desktop and mobile) on pull requests. These tests check software behavior; they are **not** human usability feedback.
 - `.github/workflows/deploy.yml` deploys `main` to GitHub Pages.
 - Pages **Source** needs to be set to **GitHub Actions**.
 
-A small-group usability protocol for 5-8 real people is available in [`docs/TESTING.md`](docs/TESTING.md). Synthetic persona feedback is not presented as feedback from real visitors.
+A future optional small-group usability protocol for 5-8 real people is available in [`docs/TESTING.md`](docs/TESTING.md). Synthetic persona feedback is not presented as feedback from real visitors.
 
 ## Boundaries and next steps
 
-The current sample is for testing interaction, editorial tone and usability. It does not validate market demand or learning outcomes. Real community statistics, analytics, a newsletter and payment features require separate design and lawful implementation. Prioritize small tests with actual users, source quality and accessibility before expanding content and infrastructure.
+The current sample is for testing interaction, editorial tone and usability. It does not validate market demand or learning outcomes. Real community statistics, analytics, a newsletter and payment features require separate design and lawful implementation. Currently, rely on automated browser tests and explicitly labelled synthetic reviews if available; these do not establish real user interest. Prioritize source quality, accessibility and testing with real users when feasible before major investment.
