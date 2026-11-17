@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import MessageSimulation from './MessageSimulation'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check,
   CircleHelp, Clock3, Eye, Fingerprint, HeartHandshake, Layers3, LockKeyhole,
@@ -201,6 +202,7 @@ function ScenarioExperience({ scenario, onClose, onNext }: { scenario: Scenario;
 
 function App() {
   const [activeScenario, setActiveScenario] = useState<Scenario | null>(null)
+  const [showMessageSimulation, setShowMessageSimulation] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [topic, setTopic] = useState<'All' | Topic>('All')
   const filtered = topic === 'All' ? scenarios : scenarios.filter(s => s.topic === topic)
@@ -210,7 +212,7 @@ function App() {
   const viewTopic = (value: 'All' | Topic) => {setTopic(value);go('stories')}
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 02 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 03 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
@@ -220,6 +222,7 @@ function App() {
           <button onClick={() => viewTopic('Decide')}>Decide</button>
           <button onClick={() => viewTopic('Detect')}>Detect</button>
           <button onClick={() => viewTopic('Play')}>Play</button>
+          <button onClick={() => go('live')}>Live story</button>
           <button onClick={() => go('how-it-works')}>How it works</button>
           <button onClick={() => go('science')}>The science</button>
         </nav>
@@ -256,6 +259,22 @@ function App() {
         <div className="container intro-strip-inner"><div className="intro-label"><Sparkles size={17}/> OUR IDEA IN A SENTENCE</div><p>Not here to tell you <em>what</em> to think. Here to explore <em>how</em> we think.</p><span className="intro-asterisk">✳</span></div>
       </section>
 
+      <section className="simulation-spotlight" id="live">
+        <div className="container simulation-spotlight-grid">
+          <div className="simulation-copy">
+            <div className="eyebrow dark"><span className="line"/> FEATURED IMMERSIVE STORY / 001</div>
+            <h2>A message arrives.<br/><em>What happens next?</em></h2>
+            <p>A number you don't recognize claims to be your mom. She needs money urgently. The messages change based on what you decide, and one small detail may change everything.</p>
+            <div className="simulation-tagline"><span><Clock3 size={15}/> 2–3 minutes</span><span><ShieldCheck size={15}/> Fictional & safe</span><span><MousePointerClick size={15}/> Your choices shape the story</span></div>
+            <button className="simulation-start" onClick={() => setShowMessageSimulation(true)}>Open the message <ArrowUpRight size={18}/></button>
+          </div>
+          <button className="simulation-preview" onClick={() => setShowMessageSimulation(true)} aria-label="Start interactive message simulation">
+            <span className="simulation-preview-top"><span>THE FAMILY TEXT / DETECT</span><span>LIVE STORY 01</span></span>
+            <div className="simulation-preview-phone" aria-hidden="true"><span>UNKNOWN NUMBER · 14:32</span><strong>Hi, it's Mom. I'm borrowing a phone. Please, can you help me?</strong></div>
+            <span className="simulation-preview-bottom">See how the story unfolds <ArrowUpRight size={17}/></span>
+          </button>
+        </div>
+      </section>
       <section className="pillars-section" aria-label="Three ways to explore"><div className="container pillar-grid">
         <button className="pillar-card" onClick={() => viewTopic('Decide')}><span className="pillar-label"><HeartHandshake size={22}/> DECIDE</span><strong>Stories that change when you know more.</strong><span>Relationships, work and everyday choices <ArrowUpRight size={16}/></span></button>
         <button className="pillar-card" onClick={() => viewTopic('Detect')}><span className="pillar-label"><ShieldCheck size={22}/> DETECT</span><strong>Find the catch before it finds you.</strong><span>Scams, pressure tactics and digital trust <ArrowUpRight size={16}/></span></button>
@@ -294,8 +313,9 @@ function App() {
 
       <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.2</span></div></footer>
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.3</span></div></footer>
     {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} />}
+    {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} />}
   </>
 }
 
