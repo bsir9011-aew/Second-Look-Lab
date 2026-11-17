@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import MessageSimulation from './MessageSimulation'
 import JourneyDashboard from './JourneyDashboard'
 import MobileInstallCard from './MobileInstallCard'
-import './mobile-lab.css'
 import { useLabJourney, type ExperienceId, XP_PER_EXPERIENCE } from './labJourney'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, Compass, House, UserRound,
