@@ -32,8 +32,19 @@ test('PWA serves app and interactive experience with network disconnected', asyn
   )
   const workerUrl = await page.evaluate(() => navigator.serviceWorker.controller?.scriptURL ?? '')
   expect(workerUrl.endsWith('/sw.js')).toBeTruthy()
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(String(error)))
+  page.on('console', message => { if (message.type() === 'error') errors.push('console: ' + message.text()) })
   await context.setOffline(true)
   await page.reload({ waitUntil: 'domcontentloaded' })
+  const diagnostics = await page.evaluate(async () => ({
+    title: document.title,
+    rootLength: document.getElementById('root')?.innerHTML.length ?? -1,
+    bodySample: document.body.innerText.slice(0, 120),
+    cacheNames: await caches.keys(),
+    controlled: Boolean(navigator.serviceWorker.controller),
+  }))
+  console.log('OFFLINE DIAGNOSTICS', JSON.stringify({ ...diagnostics, errors }))
   await expect(page.getByRole('heading', { name: /What if there's/ })).toBeVisible()
   await page.getByRole('button', { name: 'Open The apology written by AI interactive story' }).click()
   await expect(page.getByRole('dialog', { name: 'The apology written by AI interactive scenario' })).toBeVisible()
