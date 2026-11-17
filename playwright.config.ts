@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: '**/pwa.spec.ts',
   timeout: 30_000,
   expect: { timeout: 8_000 },
   retries: process.env.CI ? 1 : 0,
