@@ -72,7 +72,8 @@
  .message-close{width:44px;height:44px}
  .message-layout{display:flex;flex-direction:column}
  .message-phone-region{padding:9px 12px 10px;min-height:0}
- .message-phone-label,.message-trust{display:none}
+ .message-phone-label{display:none}
+ .message-trust{display:flex;font-size:9px;margin-top:6px;text-align:center;line-height:1.35}
  .message-phone{width:min(100%,410px);max-width:410px;min-height:0;max-height:180px;border-width:3px;border-radius:13px}
  .message-phone-status,.message-phone-input{display:none}
  .message-phone-contact{padding:7px 10px}
