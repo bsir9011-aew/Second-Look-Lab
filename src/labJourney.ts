@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export const EXPERIENCE_IDS = [
   'ai-apology', 'the-bank-call', 'only-two-left',
-  'the-third-cancellation', 'gut-vs-data', 'the-better-deal', 'the-family-text',
+  'the-third-cancellation', 'gut-vs-data', 'the-better-deal', 'the-family-text', 'the-screenshot',
 ] as const
 
 export type ExperienceId = typeof EXPERIENCE_IDS[number]
@@ -29,7 +29,7 @@ export const LEVELS = [
 
 export const LENSES: { id: LensId; description: string; experiences: readonly ExperienceId[] }[] = [
   { id: 'Decide', description: 'Human choices and context', experiences: ['ai-apology', 'the-third-cancellation'] },
-  { id: 'Detect', description: 'Trust, scams and pressure', experiences: ['the-bank-call', 'only-two-left', 'the-family-text'] },
+  { id: 'Detect', description: 'Trust, scams and pressure', experiences: ['the-bank-call', 'only-two-left', 'the-family-text', 'the-screenshot'] },
   { id: 'Play', description: 'Estimates and comparisons', experiences: ['gut-vs-data', 'the-better-deal'] },
 ]
 

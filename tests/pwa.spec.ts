@@ -83,3 +83,27 @@ test('mobile quick navigation and story sizing remain usable', async ({ page }, 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(overflow).toBeLessThanOrEqual(3)
 })
+
+
+test('The Screenshot new immersive mystery can be finished offline after initial online load', async ({ page, context }) => {
+  await page.goto('/')
+  await page.waitForFunction(
+    () => 'serviceWorker' in navigator && navigator.serviceWorker.controller?.scriptURL.endsWith('/sw.js'),
+    null, { timeout: 25000 },
+  )
+  await context.setOffline(true)
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await page.getByRole('button', { name: 'Start The Screenshot interactive mystery' }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog.getByRole('heading', { name: /One screenshot/ })).toBeVisible()
+  await dialog.getByRole('button', { name: /Message Mara privately/ }).click()
+  await dialog.getByRole('button', { name: 'See what happens' }).click()
+  await dialog.getByRole('button', { name: 'Open the evidence board' }).click()
+  await dialog.getByRole('button', { name: /The conversation above it/ }).click()
+  await dialog.getByRole('button', { name: /What viewers actually saw/ }).click()
+  await dialog.getByRole('button', { name: 'Take a second look' }).click()
+  await dialog.getByRole('button', { name: /Ask for a clear public correction/ }).click()
+  await dialog.getByRole('button', { name: 'See the ending' }).click()
+  await expect(dialog.getByRole('heading', { name: 'You challenge the claim, not the person.' })).toBeVisible()
+  await expect(dialog.getByText('+120 discovery XP · New experience')).toBeVisible()
+})
