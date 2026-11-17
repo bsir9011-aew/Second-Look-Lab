@@ -204,22 +204,26 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [topic, setTopic] = useState<'All' | Topic>('All')
   const filtered = topic === 'All' ? scenarios : scenarios.filter(s => s.topic === topic)
-  const go = (id: string) => {setMenuOpen(false); document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+  const featured = scenarios[Math.floor(Date.now() / 86400000) % scenarios.length]
+  const openNext = () => { if (activeScenario) setActiveScenario(scenarios[(scenarios.findIndex(s => s.id === activeScenario.id) + 1) % scenarios.length]) }
+  const go = (id: string) => {setMenuOpen(false); const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; document.getElementById(id)?.scrollIntoView({behavior:reduced?'auto':'smooth'}) }
+  const viewTopic = (value: 'All' | Topic) => {setTopic(value);go('stories')}
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 01 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 02 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
           <span className="brand-mark"><Eye size={25} strokeWidth={2}/></span><span>SECOND <i>LOOK</i><small>LAB</small></span>
         </button>
         <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
-          <button onClick={() => go('stories')}>Explore stories</button>
-          <button onClick={() => go('how-it-works')}>Our approach</button>
+          <button onClick={() => viewTopic('Decide')}>Decide</button>
+          <button onClick={() => viewTopic('Detect')}>Detect</button>
+          <button onClick={() => viewTopic('Play')}>Play</button>
+          <button onClick={() => go('how-it-works')}>How it works</button>
           <button onClick={() => go('science')}>The science</button>
-          <button onClick={() => go('about')}>About</button>
         </nav>
-        <button className="nav-cta" onClick={() => {setActiveScenario(scenarios[1]);setMenuOpen(false)}}>Enter the Lab <ArrowUpRight size={16}/></button>
+        <button className="nav-cta" onClick={() => {setActiveScenario(featured);setMenuOpen(false)}}>Enter the Lab <ArrowUpRight size={16}/></button>
         <button className="mobile-menu icon-button" onClick={() => setMenuOpen(m=>!m)} aria-label="Toggle menu" aria-expanded={menuOpen}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button>
       </div>
     </header>
@@ -232,8 +236,9 @@ function App() {
           <div className="hero-copy">
             <div className="eyebrow light"><span className="line"/> THINKING CLEARLY IN A NOISY WORLD</div>
             <h1>What if there's<br/><em>more to the story?</em></h1>
-            <p>We make thousands of judgments every day. Some in a split second. Explore the details we miss, the stories we believe, and the decisions that shape our lives.</p>
-            <div className="hero-actions"><button className="button-light" onClick={() => go('stories')}>Explore the stories <ArrowUpRight size={18}/></button><button className="button-ghost-light" onClick={() => go('how-it-works')}>How it works <ArrowRight size={17}/></button></div>
+            <p>Your first answer is only the beginning. Try a short challenge, uncover a detail you missed, and see what changes.</p>
+            <div className="hero-actions"><button className="button-light" onClick={() => setActiveScenario(featured)}>Try today's pick <ArrowUpRight size={18}/></button><button className="button-ghost-light" onClick={() => go('stories')}>Explore all six <ArrowRight size={17}/></button></div>
+            <button type="button" className="featured-challenge" onClick={() => setActiveScenario(featured)}><span><strong>TODAY'S SECOND LOOK</strong><small>Featured experience • rotates daily</small></span><span className="featured-name">{featured.title}</span><ArrowUpRight size={20}/></button>
             <div className="hero-footnote"><span className="footnote-line"/> NO HYPE. NO EASY ANSWERS. JUST A SECOND LOOK.</div>
           </div>
           <div className="hero-art" aria-label="A visual illustration of two perspectives">
@@ -251,18 +256,26 @@ function App() {
         <div className="container intro-strip-inner"><div className="intro-label"><Sparkles size={17}/> OUR IDEA IN A SENTENCE</div><p>Not here to tell you <em>what</em> to think. Here to explore <em>how</em> we think.</p><span className="intro-asterisk">✳</span></div>
       </section>
 
+      <section className="pillars-section" aria-label="Three ways to explore"><div className="container pillar-grid">
+        <button className="pillar-card" onClick={() => viewTopic('Decide')}><span className="pillar-label"><HeartHandshake size={22}/> DECIDE</span><strong>Stories that change when you know more.</strong><span>Relationships, work and everyday choices <ArrowUpRight size={16}/></span></button>
+        <button className="pillar-card" onClick={() => viewTopic('Detect')}><span className="pillar-label"><ShieldCheck size={22}/> DETECT</span><strong>Find the catch before it finds you.</strong><span>Scams, pressure tactics and digital trust <ArrowUpRight size={16}/></span></button>
+        <button className="pillar-card" onClick={() => viewTopic('Play')}><span className="pillar-label"><Sparkles size={22}/> PLAY</span><strong>Guess, compare and surprise yourself.</strong><span>Quick games, predictions and numbers <ArrowUpRight size={16}/></span></button>
+      </div></section>
       <section className="stories-section section-padding" id="stories">
         <div className="container">
-          <div className="section-heading"><div><div className="eyebrow dark"><span className="line"/> THE READING ROOM / 001</div><h2>Stories worth<br/><em>thinking twice about.</em></h2></div><p>Every story begins with a question. Your answer might change when you see what was missing.</p></div>
-          <div className="topic-filters" aria-label="Filter stories by subject">{(['All','Human behavior','Digital trust','Everyday traps'] as const).map(t => <button key={t} className={topic === t ? 'active' : ''} onClick={()=>setTopic(t)}>{t}{topic === t && <span className="filter-dot"/>}</button>)}</div>
+          <div className="section-heading"><div><div className="eyebrow dark"><span className="line"/> SIX WAYS TO TAKE A SECOND LOOK</div><h2>Explore the Lab.<br/><em>Choose your challenge.</em></h2></div><p>First decide. Then discover new information, test a prediction or spot a hidden cost.</p></div>
+          <div className="topic-filters" aria-label="Filter stories by subject">{(['All','Decide','Detect','Play'] as const).map(t => <button key={t} className={topic === t ? 'active' : ''} onClick={()=>setTopic(t)}>{t}{topic === t && <span className="filter-dot"/>}</button>)}</div>
           <div className="story-grid">{filtered.map((s) => <article className={`story-card story-${s.id}`} key={s.id}>
             <button className="story-cover" onClick={() => setActiveScenario(s)} aria-label={`Open ${s.title} interactive story`}>
-              <div className="cover-top"><span>FIELD NOTES / {s.number}</span><ArrowUpRight size={19}/></div>
+              <div className="cover-top"><span>EXPERIENCE / {s.number}</span><ArrowUpRight size={19}/></div>
               {s.id === 'ai-apology' && <div className="cover-visual apology-visual"><span className="chat-bubble b1">I know I hurt you...</span><span className="chat-bubble b2">I want to do better.</span><span className="chat-spark"><Sparkles size={25}/></span></div>}
               {s.id === 'the-bank-call' && <div className="cover-visual bank-visual"><div className="fake-phone"><div className="phone-notch"/><div className="calling-icon"><Fingerprint size={29}/></div><strong>UNKNOWN CALLER</strong><small>“Your bank's fraud team”</small><div className="call-controls"><span/><span/></div></div></div>}
               {s.id === 'only-two-left' && <div className="cover-visual hotel-visual"><div className="booking-pane"><span className="pane-top">LIMITED AVAILABILITY</span><strong>ONLY 2 LEFT</strong><div className="mock-countdown"><Clock3 size={16}/> 08:42</div><span className="pane-bottom">BOOK BEFORE IT'S GONE</span></div></div>}
+              {s.id === 'the-third-cancellation' && <div className="cover-visual friend-visual"><div className="note-chat one">Sorry. Something came up.</div><div className="note-chat two">Again?</div><div className="note-chat three">Maybe there's more to it.</div></div>}
+              {s.id === 'gut-vs-data' && <div className="cover-visual gut-visual"><div className="gut-figure"><span>YOUR GUESS</span><strong>?</strong><div className="gut-meter"><i/></div><small>WHAT DO THE NUMBERS SAY?</small></div></div>}
+              {s.id === 'the-better-deal' && <div className="cover-visual deal-visual"><div className="deal-sticker"><small>BAG A</small><strong>$12</strong><span>750 g</span></div><div className="deal-sticker alternate"><small>BAG B</small><strong>$15</strong><span>1 kg</span></div></div>}
             </button>
-            <div className="story-info"><div className="story-meta"><span>{s.topic.toUpperCase()}</span><span>{s.readTime} READ</span></div><button className="story-title-button" onClick={() => setActiveScenario(s)}><h3>{s.title}</h3></button><p>{s.teaser}</p><button className="text-cta" onClick={() => setActiveScenario(s)}>Take a second look <ArrowUpRight size={17}/></button></div>
+            <div className="story-info"><div className="story-meta"><span>{s.topic.toUpperCase()}</span><span>{s.readTime} EXPERIENCE</span></div><button className="story-title-button" onClick={() => setActiveScenario(s)}><h3>{s.title}</h3></button><p>{s.teaser}</p><button className="text-cta" onClick={() => setActiveScenario(s)}>Try this experience <ArrowUpRight size={17}/></button></div>
           </article>)}</div>
           <p className="stories-note"><CircleHelp size={15}/> Stories are fictional thought experiments. No fabricated stories are presented as reader submissions.</p>
         </div>
@@ -270,19 +283,19 @@ function App() {
 
       <section className="method-section section-padding" id="how-it-works">
         <div className="container method-layout">
-          <div className="method-copy"><div className="eyebrow light"><span className="line"/> THE SECOND LOOK METHOD</div><h2>First, decide.<br/><em>Then discover.</em></h2><p>The most interesting part of a story sometimes arrives after you've already made up your mind. Our interactive stories let you experience that moment for yourself.</p><button className="button-light" onClick={() => setActiveScenario(scenarios[0])}>Try a 3-minute scenario <ArrowUpRight size={18}/></button></div>
+          <div className="method-copy"><div className="eyebrow light"><span className="line"/> THE SECOND LOOK METHOD</div><h2>First, decide.<br/><em>Then discover.</em></h2><p>Choose your first answer, uncover a new detail, then think again. Sometimes there is a clear lesson; sometimes the interesting part is noticing your own assumptions.</p><button className="button-light" onClick={() => setActiveScenario(scenarios[0])}>Try a 3-minute scenario <ArrowUpRight size={18}/></button></div>
           <div className="method-steps">
             {[{num:'01',title:'Make the call',desc:'Read a realistic situation and choose what you would do.',icon:<MousePointerClick size={21}/>},{num:'02',title:'See what was missing',desc:'Discover a detail that changes the picture.',icon:<Eye size={21}/>},{num:'03',title:'Think again',desc:'Revisit your judgment with more context.',icon:<Layers3 size={21}/>},{num:'04',title:'Take it into real life',desc:'Leave with one idea you can actually use.',icon:<ArrowUpRight size={21}/>}].map((it)=><div className="method-step" key={it.num}><span className="step-num">{it.num}</span><div><h3>{it.title}</h3><p>{it.desc}</p></div><span className="step-icon">{it.icon}</span></div>)}
           </div>
         </div>
       </section>
 
-      <section className="science-section section-padding" id="science"><div className="container science-layout"><div className="science-art"><div className="science-outline"><span className="science-lbl sl-one">ASSUMPTION</span><span className="science-lbl sl-two">EVIDENCE</span><span className="science-lbl sl-three">PERSPECTIVE</span><div className="science-ellipses"><div/><div/><div/></div></div><div className="science-quote">“I hadn't<br/>considered that.”</div></div><div className="science-copy"><div className="eyebrow dark"><span className="line"/> BEYOND THE HOT TAKE</div><h2>Curiosity is<br/><em>a better habit.</em></h2><p>We explore human behavior, digital trust, and the design of everyday decisions. When we discuss psychology or security, we separate evidence from opinion and explain what a single scenario cannot prove.</p><div className="science-values"><div><BookOpen size={20}/><span>Evidence before certainty</span></div><div><HeartHandshake size={20}/><span>Different views, without the shouting</span></div><div><ShieldCheck size={20}/><span>Practical lessons, not fear</span></div></div></div></div></section>
+      <section className="science-section section-padding" id="science"><div className="container science-layout"><div className="science-art"><div className="science-outline"><span className="science-lbl sl-one">ASSUMPTION</span><span className="science-lbl sl-two">EVIDENCE</span><span className="science-lbl sl-three">PERSPECTIVE</span><div className="science-ellipses"><div/><div/><div/></div></div><div className="science-quote">“I hadn't<br/>considered that.”</div></div><div className="science-copy"><div className="eyebrow dark"><span className="line"/> BEYOND THE HOT TAKE</div><h2>Curiosity is<br/><em>a better habit.</em></h2><p>We explore human behavior, digital trust, playful predictions and the design of everyday decisions. When we discuss psychology or security, we separate evidence from opinion and explain what a single scenario cannot prove.</p><div className="science-values"><div><BookOpen size={20}/><span>Evidence before certainty</span></div><div><HeartHandshake size={20}/><span>Different views, without the shouting</span></div><div><ShieldCheck size={20}/><span>Practical lessons, not fear</span></div></div></div></div></section>
 
-      <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public learning experiment about trust, choices, and digital life. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
+      <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Concept prototype v0.1</span></div></footer>
-    {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} />}
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.2</span></div></footer>
+    {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} />}
   </>
 }
 
