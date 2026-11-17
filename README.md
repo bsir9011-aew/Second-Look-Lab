@@ -2,9 +2,23 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
+## Interactive v0.5 - The Second Look Dossier
+
+The existing level system is extended, not replaced:
+
+- **Three Lenses**: Decide, Detect, Play counts from existing completed experiences; no inferences about intelligence or ability.
+- **One collection**: Trust & Deception (bank call, family text and hotel pressure).
+- **Three genuine badges**: First Second Look; Across the Lab; Trust Decoder. These describe exploration only.
+- **Focus Mode**: hides XP, rank and badges, including XP announcements inside finished scenarios. Discoveries are still counted locally.
+- **Lab Passport**: download/copy JSON; paste to **import and merge** progress into another browser, without an account. No answers or identity data in the Passport.
+- **Automatic upgrade from v0.4**: older `second-look-lab:journey:v1` data is read and copied to `second-look-lab:dossier:v2` while preserving unique completions and 120 XP per experience.
+- Progress is still **local to the device/browser**, not automatically synchronized. Passports are plain-text and can be edited: they are not cryptographic proof or certificates.
+
+Canonical product principles for future sessions: [docs/PRODUCT_PRINCIPLES.md](docs/PRODUCT_PRINCIPLES.md).
+
 ## Interactive v0.4 - local progress and levels
 
-The public site now includes an optional, private **Your Journey** progression panel: levels **0 to 10**, 120 discovery XP per *unique* completed experience, progress toward the next rank, and a collection of seven completed experiences. The level reflects participation in the site, **not tested skills, professional competence or a certificate**.
+The original v0.4 introduced an optional, private **Your Journey** progression panel: levels **0 to 10**, 120 discovery XP per *unique* completed experience, progress toward the next rank, and a collection of seven completed experiences. The level reflects participation in the site, **not tested skills, professional competence or a certificate**.
 
 Progress is stored only in browser `localStorage` under `second-look-lab:journey:v1`. It does not require an account or backend and is never sent to a server. Replay doesn't add XP; a reset button clears local progress after confirmation. Different devices/browsers have different progress. Some high levels are intentionally not reachable until more original experiences are published.
 
@@ -49,7 +63,7 @@ Vite builds a static site; `src/styles.css` retains the original editorial styli
 
 ### Automated verification and deployment
 
-- `.github/workflows/verify.yml` runs the TypeScript/Vite build and scripted Chromium browser journeys including progress persistence and replay protection (desktop and mobile) on pull requests. These tests check software behavior; they are **not** human usability feedback.
+- `.github/workflows/verify.yml` runs the TypeScript/Vite build and scripted Chromium browser journeys including v0.4 migration, Passport importing, Focus Mode, progress persistence and replay protection (desktop and mobile) on pull requests. These tests check software behavior; they are **not** human usability feedback.
 - `.github/workflows/deploy.yml` deploys `main` to GitHub Pages.
 - Pages **Source** needs to be set to **GitHub Actions**.
 
