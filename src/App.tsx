@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import MessageSimulation from './MessageSimulation'
+import ScreenshotMystery from './ScreenshotMystery'
 import JourneyDashboard from './JourneyDashboard'
 import MobileInstallCard from './MobileInstallCard'
 import { useLabJourney, type ExperienceId, XP_PER_EXPERIENCE } from './labJourney'
@@ -208,6 +209,7 @@ function ScenarioExperience({ scenario, onClose, onNext, onComplete, alreadyComp
 function App() {
   const [activeScenario, setActiveScenario] = useState<Scenario | null>(null)
   const [showMessageSimulation, setShowMessageSimulation] = useState(false)
+  const [showScreenshotMystery, setShowScreenshotMystery] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [topic, setTopic] = useState<'All' | Topic>('All')
   const journey = useLabJourney()
@@ -215,14 +217,22 @@ function App() {
   const featured = scenarios[Math.floor(Date.now() / 86400000) % scenarios.length]
   const openNext = () => { if (activeScenario) setActiveScenario(scenarios[(scenarios.findIndex(s => s.id === activeScenario.id) + 1) % scenarios.length]) }
   const openExperience = (id: ExperienceId) => {
+    if (id === 'the-screenshot') {
+      setActiveScenario(null)
+      setShowMessageSimulation(false)
+      setShowScreenshotMystery(true)
+      return
+    }
     if (id === 'the-family-text') {
       setActiveScenario(null)
+      setShowScreenshotMystery(false)
       setShowMessageSimulation(true)
       return
     }
     const selected = scenarios.find(scenario => scenario.id === id)
     if (selected) {
       setShowMessageSimulation(false)
+      setShowScreenshotMystery(false)
       setActiveScenario(selected)
     }
   }
@@ -236,7 +246,7 @@ function App() {
   }, [])
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 06 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 07 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
@@ -265,7 +275,7 @@ function App() {
             <div className="eyebrow light"><span className="line"/> THINKING CLEARLY IN A NOISY WORLD</div>
             <h1>What if there's<br/><em>more to the story?</em></h1>
             <p>Your first answer is only the beginning. Try a short challenge, uncover a detail you missed, and see what changes.</p>
-            <div className="hero-actions"><button className="button-light" onClick={() => setActiveScenario(featured)}>Try today's pick <ArrowUpRight size={18}/></button><button className="button-ghost-light" onClick={() => go('stories')}>Explore all six <ArrowRight size={17}/></button></div>
+            <div className="hero-actions"><button className="button-light" onClick={() => setShowScreenshotMystery(true)}>Play the new mystery <ArrowUpRight size={18}/></button><button className="button-ghost-light" onClick={() => go('stories')}>Explore the Lab <ArrowRight size={17}/></button></div>
             <button type="button" className="featured-challenge" onClick={() => setActiveScenario(featured)}><span><strong>TODAY'S SECOND LOOK</strong><small>Featured experience • rotates daily</small></span><span className="featured-name">{featured.title}</span><ArrowUpRight size={20}/></button>
             <div className="hero-footnote"><span className="footnote-line"/> NO HYPE. NO EASY ANSWERS. JUST A SECOND LOOK.</div>
           </div>
@@ -284,6 +294,22 @@ function App() {
         <div className="container intro-strip-inner"><div className="intro-label"><Sparkles size={17}/> OUR IDEA IN A SENTENCE</div><p>Not here to tell you <em>what</em> to think. Here to explore <em>how</em> we think.</p><span className="intro-asterisk">✳</span></div>
       </section>
 
+      <section className="screenshot-feature" id="the-screenshot">
+        <div className="container screenshot-feature-grid">
+          <div>
+            <div className="eyebrow"><span className="line"/> NEW · IMMERSIVE STORY / 002</div>
+            <h2>The screenshot<br/><em>that changed the story.</em></h2>
+            <p>A screenshot appears to expose fraud at a community fundraiser. Do you share it, question it or investigate? Inspect the original evidence and see how your choice changes what happens next.</p>
+            <div className="screenshot-feature-points"><span><Clock3 size={15}/> 3–4 minutes</span><span><ShieldCheck size={15}/> Fictional mystery</span><span><MousePointerClick size={15}/> Three endings</span></div>
+            <button type="button" className="screenshot-feature-button" onClick={() => setShowScreenshotMystery(true)}>Investigate the screenshot <ArrowUpRight size={18}/></button>
+          </div>
+          <button type="button" className="screenshot-feature-art" onClick={() => setShowScreenshotMystery(true)} aria-label="Start The Screenshot interactive mystery">
+            <div><span>THE SCREENSHOT / DETECT</span><span>CASE 002</span></div>
+            <span className="screenshot-preview-message">I changed the total before the livestream. Nobody noticed.</span>
+            <div>There's more above the crop. <ArrowUpRight size={18}/></div>
+          </button>
+        </div>
+      </section>
       <section className="simulation-spotlight" id="live">
         <div className="container simulation-spotlight-grid">
           <div className="simulation-copy">
@@ -340,12 +366,17 @@ function App() {
 
       <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.6</span></div></footer>
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.7</span></div></footer>
     <nav className="mobile-bottom-nav" aria-label="Quick mobile navigation">
       <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><House size={20} aria-hidden="true"/><span>Home</span></button>
       <button type="button" onClick={() => go('stories')}><Compass size={20} aria-hidden="true"/><span>Play</span></button>
       <button type="button" onClick={() => go('my-progress')}><UserRound size={20} aria-hidden="true"/><span>Dossier</span></button>
     </nav>
+    {showScreenshotMystery && <ScreenshotMystery onClose={() => setShowScreenshotMystery(false)}
+      onExplore={() => { setShowScreenshotMystery(false); setShowMessageSimulation(true) }}
+      onComplete={() => journey.markCompleted('the-screenshot')}
+      alreadyCompleted={journey.completed.includes('the-screenshot')}
+      focusMode={journey.focusMode}/>}
     {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} onComplete={journey.markCompleted} alreadyCompleted={journey.completed.includes(activeScenario.id as ExperienceId)} focusMode={journey.focusMode}/>}
     {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} onComplete={() => journey.markCompleted('the-family-text')} alreadyCompleted={journey.completed.includes('the-family-text')} focusMode={journey.focusMode}/>}
   </>
