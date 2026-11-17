@@ -1,0 +1,42 @@
+
+/* Second Look Lab v0.4 - browser-local exploration levels */
+.journey-section{background:#e5eee4;padding:74px 0 78px;border-block:1px solid #d3e1d3}
+.journey-layout{display:grid;grid-template-columns:.82fr 1.18fr;gap:64px;align-items:center}
+.journey-heading h2{font-size:clamp(39px,4vw,62px);line-height:1.08;margin:21px 0 22px;letter-spacing:-.055em;color:#153c3a}
+.journey-heading h2 em{color:#5b9d85}
+.journey-heading p{max-width:420px;color:#54776c;line-height:1.76;font-size:15px}
+.journey-start{display:flex;align-items:center;gap:12px;padding:14px 18px;margin-top:24px;border-radius:4px;background:#174b43;color:#f0f9ee;font-weight:800;font-size:13px}
+.journey-start:hover,.journey-start:focus-visible{background:#276954}
+.journey-card{background:#fbfcf5;border:1px solid #d1dfd1;box-shadow:0 16px 45px rgba(22,65,49,.065);border-radius:7px;padding:28px 30px;color:#1f4940}
+.journey-card-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.journey-level-icon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#dcefe0;color:#39846a}
+.journey-level-name{display:flex;flex-direction:column;gap:4px;flex:1}
+.journey-level-name>span{font-size:9px;font-weight:850;letter-spacing:.14em;color:#5b907d}
+.journey-level-name strong{font-family:Georgia,serif;font-size:25px;font-weight:600;line-height:1.2}
+.journey-xp{font-variant-numeric:tabular-nums;font-weight:900;font-size:16px;color:#2c745b}
+.journey-progress-head{display:flex;justify-content:space-between;gap:12px;margin:27px 0 10px;color:#628475;font-size:10px;font-weight:850;letter-spacing:.08em}
+.journey-bar{height:12px;background:#e0e9dd;border-radius:30px;overflow:hidden}
+.journey-bar>span{height:100%;background:linear-gradient(90deg,#3b8671,#7dc4a3);display:block;border-radius:30px;transition:width .3s ease}
+.journey-ladder{display:flex;justify-content:space-between;gap:2px;margin:14px 0 25px}
+.journey-ladder span{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#e5ebe2;border:1px solid #d4dfd5;color:#8ba498;font-size:10px;font-weight:800}
+.journey-ladder span.earned{background:#397f68;border-color:#397f68;color:#fff}
+.journey-completions{border-top:1px solid #dce5db;padding-top:20px}
+.journey-completions-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.journey-completions-head strong{font-size:10px;letter-spacing:.1em;color:#3e7161}
+.journey-completions-head>span{font-size:12px;color:#6c887d}
+.journey-experience-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.journey-experience-grid>span{display:flex;align-items:center;gap:8px;border-radius:4px;background:#f2f5ed;border:1px solid #e0e7df;color:#8c9e94;font-size:12px;padding:9px 11px}
+.journey-experience-grid>span.journey-done{color:#256b53;background:#e5f3e7;border-color:#c6e3ce;font-weight:750}
+.journey-experience-grid svg{color:#2e9068}
+.journey-unseen{width:12px;height:12px;border-radius:50%;border:1px solid #a8beb2;flex-shrink:0}
+.journey-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;padding-top:13px;border-top:1px solid #dce5db}
+.journey-foot>span{display:flex;align-items:center;gap:5px;flex:1;color:#779187;font-size:10px;line-height:1.45}
+.journey-foot button{display:flex;align-items:center;gap:6px;background:none;color:#3a735f;border:0;font-size:11px;font-weight:750;padding:6px}
+.journey-foot button:hover{text-decoration:underline}
+.journey-note{display:flex;align-items:flex-start;gap:6px;color:#82968d;font-size:10px;line-height:1.6;margin:13px 0 0}
+.journey-note svg{flex-shrink:0;margin-top:1px}
+.journey-earned{display:inline-flex;align-items:center;gap:6px;margin:12px 0 2px;padding:8px 12px;border-radius:50px;background:#e1f2e4;color:#2b805e;font-size:11px;font-weight:800}
+.journey-earned.replayed{background:#edf0ea;color:#60766a}
+@media(max-width:940px){.journey-layout{grid-template-columns:1fr;gap:32px}.journey-heading p{max-width:660px}}
+@media(max-width:540px){.journey-section{padding:55px 0}.journey-card{padding:18px}.journey-heading h2{font-size:42px}.journey-level-name strong{font-size:21px}.journey-ladder span{width:21px;height:21px;font-size:9px}.journey-experience-grid{grid-template-columns:1fr}.journey-progress-head{font-size:9px}.journey-foot>span{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.journey-bar>span{transition:none}}
