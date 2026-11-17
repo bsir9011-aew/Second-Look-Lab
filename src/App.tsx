@@ -213,11 +213,23 @@ function App() {
   const filtered = topic === 'All' ? scenarios : scenarios.filter(s => s.topic === topic)
   const featured = scenarios[Math.floor(Date.now() / 86400000) % scenarios.length]
   const openNext = () => { if (activeScenario) setActiveScenario(scenarios[(scenarios.findIndex(s => s.id === activeScenario.id) + 1) % scenarios.length]) }
+  const openExperience = (id: ExperienceId) => {
+    if (id === 'the-family-text') {
+      setActiveScenario(null)
+      setShowMessageSimulation(true)
+      return
+    }
+    const selected = scenarios.find(scenario => scenario.id === id)
+    if (selected) {
+      setShowMessageSimulation(false)
+      setActiveScenario(selected)
+    }
+  }
   const go = (id: string) => {setMenuOpen(false); const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; document.getElementById(id)?.scrollIntoView({behavior:reduced?'auto':'smooth'}) }
   const viewTopic = (value: 'All' | Topic) => {setTopic(value);go('stories')}
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 05 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 05.1 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
@@ -306,7 +318,7 @@ function App() {
         </div>
       </section>
 
-      <JourneyDashboard stats={journey} completed={journey.completed} focusMode={journey.focusMode} passport={journey.passport} onReset={journey.resetJourney} onTry={() => go('stories')} onFocusChange={journey.setFocusMode} onImport={journey.importPassport}/>
+      <JourneyDashboard stats={journey} completed={journey.completed} focusMode={journey.focusMode} passport={journey.passport} onReset={journey.resetJourney} onOpenExperience={openExperience} onFocusChange={journey.setFocusMode} onImport={journey.importPassport}/>
       <section className="method-section section-padding" id="how-it-works">
         <div className="container method-layout">
           <div className="method-copy"><div className="eyebrow light"><span className="line"/> THE SECOND LOOK METHOD</div><h2>First, decide.<br/><em>Then discover.</em></h2><p>Choose your first answer, uncover a new detail, then think again. Sometimes there is a clear lesson; sometimes the interesting part is noticing your own assumptions.</p><button className="button-light" onClick={() => setActiveScenario(scenarios[0])}>Try a 3-minute scenario <ArrowUpRight size={18}/></button></div>
@@ -320,7 +332,7 @@ function App() {
 
       <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.5</span></div></footer>
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.5.1</span></div></footer>
     {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} onComplete={journey.markCompleted} alreadyCompleted={journey.completed.includes(activeScenario.id as ExperienceId)} focusMode={journey.focusMode}/>}
     {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} onComplete={() => journey.markCompleted('the-family-text')} alreadyCompleted={journey.completed.includes('the-family-text')} focusMode={journey.focusMode}/>}
   </>
