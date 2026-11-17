@@ -116,11 +116,11 @@ const lines = [
   '      return response',
   '    }).catch(async () => {',
   '      const cache = await caches.open(CACHE_NAME)',
-  "      return (await cache.match(new URL('./index.html', self.registration.scope))) || Response.error()",
+  "      return (await cache.match(new URL('./index.html', self.registration.scope), { ignoreVary: true })) || Response.error()",
   '    }))',
   '    return',
   '  }',
-  '  event.respondWith(caches.match(request).then(cached => cached || fetch(request)))',
+  '  event.respondWith(caches.open(CACHE_NAME).then(cache => cache.match(request, { ignoreVary: true })).then(cached => cached || fetch(request)))',
   '})',
 ]
 writeFileSync(join(dist, 'sw.js'), lines.join('\n'))
