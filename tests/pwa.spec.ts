@@ -35,6 +35,7 @@ test('PWA serves app and interactive experience with network disconnected', asyn
   const errors: string[] = []
   page.on('pageerror', error => errors.push(String(error)))
   page.on('console', message => { if (message.type() === 'error') errors.push('console: ' + message.text()) })
+  page.on('requestfailed', request => errors.push('failed request: ' + request.url() + ' (' + request.failure()?.errorText + ')'))
   await context.setOffline(true)
   await page.reload({ waitUntil: 'domcontentloaded' })
   const diagnostics = await page.evaluate(async () => ({
@@ -42,6 +43,8 @@ test('PWA serves app and interactive experience with network disconnected', asyn
     rootLength: document.getElementById('root')?.innerHTML.length ?? -1,
     bodySample: document.body.innerText.slice(0, 120),
     cacheNames: await caches.keys(),
+    resources: Array.from(document.querySelectorAll('script[src],link[rel=stylesheet]')).map(node => node.getAttribute('src') || node.getAttribute('href')),
+    cachedResources: (await Promise.all((await caches.keys()).map(async name => (await (await caches.open(name)).keys()).map(request => request.url)))).flat().slice(0, 20),
     controlled: Boolean(navigator.serviceWorker.controller),
   }))
   console.log('OFFLINE DIAGNOSTICS', JSON.stringify({ ...diagnostics, errors }))
