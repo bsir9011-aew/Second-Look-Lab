@@ -55,7 +55,7 @@ export function calculateJourney(completed: readonly ExperienceId[]) {
   const current = LEVELS[level]
   const next = LEVELS[level + 1] ?? null
   const percent = next ? Math.max(0, Math.min(100, (xp - current.xp) / (next.xp - current.xp) * 100)) : 100
-  return { level, title: current.name, xp, next, percent, completed: completed.length, total: EXPERIENCE_IDS.length }
+  return { level, title: current.name, xp, next, percent, completedCount: completed.length, total: EXPERIENCE_IDS.length }
 }
 
 export function useLabJourney() {
