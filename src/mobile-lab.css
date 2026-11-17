@@ -1,0 +1,103 @@
+/* Second Look Lab v0.6 - accessible, responsive web app UI. */
+.mobile-install-section{border-block:1px solid #d4e3d4;background:#edf2e9;padding:35px 0}
+.mobile-install-layout{display:grid;grid-template-columns:58px minmax(0,1fr) minmax(200px,.49fr);align-items:center;gap:22px}
+.mobile-install-icon{width:57px;height:57px;border-radius:15px;background:#d1e8d6;display:grid;place-items:center;color:#2e8667}
+.mobile-install-copy{min-width:0}
+.mobile-install-copy .eyebrow{font-size:9px;line-height:1.4;letter-spacing:.14em}
+.mobile-install-copy h2{font-family:Georgia,serif;letter-spacing:-.035em;font-size:clamp(24px,2.9vw,36px);line-height:1.17;margin:9px 0;color:#1b4640}
+.mobile-install-copy>p{color:#507267;line-height:1.55;margin:6px 0 0;font-size:13px}
+.mobile-install-copy .mobile-install-caveat{display:flex;align-items:flex-start;gap:7px;font-size:11px;line-height:1.55;margin-top:10px;color:#718a80}
+.mobile-install-caveat svg{flex-shrink:0;margin-top:1px}
+.mobile-install-actions{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.mobile-install-button{display:flex;align-items:center;justify-content:center;gap:8px;background:#164c40;border:1px solid #164c40;color:#f0f8ed;border-radius:4px;min-height:46px;padding:12px 15px;font-size:13px;font-weight:800;cursor:pointer}
+.mobile-install-button:hover,.mobile-install-button:focus-visible{background:#276c56}
+.mobile-install-caption,.mobile-installed{display:flex;gap:8px;align-items:center;font-size:12px;color:#3b7562;font-weight:700}
+.mobile-install-steps{max-width:300px;color:#50796b;font-size:12px;line-height:1.6}
+.mobile-install-steps summary{font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+.mobile-install-steps p{line-height:1.55;margin:9px 0 0}
+.mobile-install-status{color:#28785b!important;font-weight:700}
+.mobile-bottom-nav{display:none}
+@media(max-width:880px){
+ .mobile-install-layout{grid-template-columns:52px 1fr;gap:15px}
+ .mobile-install-actions{grid-column:2}
+ .mobile-install-icon{width:52px;height:52px}
+}
+@media(max-width:700px){
+ :root{--mobile-nav-height:70px}
+ body{padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom,0px))}
+ html{scroll-padding-bottom:calc(var(--mobile-nav-height) + 16px)}
+ .mobile-bottom-nav{
+  position:fixed;display:flex;align-items:stretch;justify-content:space-around;bottom:0;left:0;right:0;
+  height:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom,0px));
+  padding:6px 8px env(safe-area-inset-bottom,0px);
+  box-sizing:border-box;z-index:90;background:#f8faf3;border-top:1px solid #bcd4c4;box-shadow:0 -6px 24px rgba(20,60,45,.11)
+ }
+ .mobile-bottom-nav button{
+  appearance:none;border:none;border-radius:5px;background:none;color:#2d6655;
+  flex:1;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;
+  min-width:0;min-height:48px;padding:5px 12px;font-size:11px;font-weight:750;cursor:pointer
+ }
+ .mobile-bottom-nav button:hover,.mobile-bottom-nav button:focus-visible{background:#e7f1e7}
+ .mobile-bottom-nav button:focus-visible{outline:2px solid #37866a;outline-offset:-3px}
+ .mobile-install-section{padding:26px 0}
+ .mobile-install-layout{grid-template-columns:1fr;gap:12px}
+ .mobile-install-icon{width:46px;height:46px}
+ .mobile-install-actions{grid-column:auto}
+ .mobile-install-copy h2{font-size:29px}
+ .mobile-install-steps{max-width:100%}
+ .mobile-install-button{min-height:48px}
+ /* Browser game modals must be as usable as installed standalone mode. */
+ .modal-backdrop{padding:0;display:block;overflow:hidden}
+ .experience{
+  height:100dvh;max-height:100dvh;min-height:0;width:100%;border-radius:0;
+  padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;overscroll-behavior:contain
+ }
+ .experience-top{position:sticky;top:0;z-index:8;background:#fcfcf6;padding:10px 16px;min-height:53px;box-sizing:border-box}
+ .experience-progress{position:sticky;top:53px;z-index:7;background:#fcfcf6;padding:8px 16px 10px}
+ .experience-progress span{height:4px}
+ .experience-content{padding:18px 18px 30px}
+ .experience-content h2{font-size:clamp(27px,7vw,34px);line-height:1.12;margin:13px 0 14px}
+ .experience-question{font-size:15px;line-height:1.55}
+ .options-list{margin:18px 0;gap:8px}
+ .option{min-height:51px;padding:11px 13px;font-size:14px;line-height:1.35}
+ .option.selected{padding:10px 12px}
+ .experience-content>.button-primary.wide{
+  position:sticky;bottom:0;z-index:5;min-height:52px;box-shadow:0 0 0 10px #fcfcf6;
+ }
+ .experience .icon-button{min-width:44px;min-height:44px;display:grid;place-items:center}
+ .experience-footer{padding:10px 13px;line-height:1.3}
+ .message-overlay{padding:0;display:block;overflow:hidden}
+ .message-dialog{width:100%;max-height:100dvh;height:100dvh;border-radius:0;overscroll-behavior:contain}
+ .message-dialog-top{padding:9px 15px;min-height:56px;box-sizing:border-box}
+ .message-close{width:44px;height:44px}
+ .message-layout{display:flex;flex-direction:column}
+ .message-phone-region{padding:9px 12px 10px;min-height:0}
+ .message-phone-label{display:none}
+ .message-trust{display:flex;font-size:9px;margin-top:6px;text-align:center;line-height:1.35}
+ .message-phone{width:min(100%,410px);max-width:410px;min-height:0;max-height:180px;border-width:3px;border-radius:13px}
+ .message-phone-status,.message-phone-input{display:none}
+ .message-phone-contact{padding:7px 10px}
+ .message-contact-avatar{width:29px;height:29px}
+ .message-chat{padding:8px 10px;max-height:119px;min-height:66px;overflow:auto;gap:6px;overscroll-behavior:contain}
+ .message-bubble{font-size:11px;line-height:1.4;padding:7px 10px}
+ .message-phone-footnote{font-size:10px}
+ .message-story{padding:17px 18px 28px;width:100%;box-sizing:border-box}
+ .message-progress{margin:8px 0 17px}
+ .message-story h2{font-size:clamp(27px,7vw,34px);margin:11px 0 13px}
+ .message-story p{font-size:13px;line-height:1.5;margin:9px 0}
+ .message-question{margin:16px 0 10px}
+ .message-option{min-height:48px;padding:10px 12px}
+ .message-option strong{font-size:12px}
+ .message-option small{font-size:10px}
+ .message-primary{min-height:51px;margin-top:14px}
+ .message-end-actions{grid-template-columns:1fr;gap:8px}
+}
+@media(max-width:380px){
+ .mobile-bottom-nav button{font-size:10px;padding-inline:6px}
+ .experience-brand{font-size:9px}
+ .message-lab-brand{font-size:10px;gap:7px}
+ .message-story{padding:15px 13px 25px}
+}
+@media(prefers-reduced-motion:reduce){
+ .mobile-install-button,.mobile-bottom-nav button{transition:none}
+}

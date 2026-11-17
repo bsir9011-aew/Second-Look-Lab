@@ -2,6 +2,27 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
+## Mobile Lab v0.6 - installable PWA
+
+This is still the same public Second Look Lab website. It can now be installed as a **Progressive Web App** (PWA) where the browser supports it, without an app store or an account.
+
+- Production build generates a manifest-compatible **192×192 and 512×512 PNG eye icon** and a **versioned, path-scoped service worker**, with no new runtime dependencies. The deployment continues to work under the GitHub Pages project URL `/Second-Look-Lab/`.
+- Once the website has been opened online and the service worker has completed caching, the **core website and interactive stories can open offline**. External research links are *not* available offline, and newly published content still needs an internet connection to arrive.
+- On mobile the UI adds three quick links (Home / Play / Dossier), reduces the footprint of the simulated conversation, scrolls to the latest message and gives the scenario modal the full screen height.
+- The optional install panel shows a native install prompt where `beforeinstallprompt` is supported and plain instructions where it is not (including iOS Safari). **Do not claim automatic installation on iOS**.
+- The PWA uses **the same scenario and XP code** as the website. PWA storage may be separate from browser storage on some platforms; users should **export Lab Passport** before relying on installation to preserve local progress.
+- Manifest shortcuts `?launch=stories` and `?launch=dossier` open the intended screen for supported launchers.
+
+### PWA quality checks
+
+```bash
+npm run build
+npm run test:e2e
+npm run test:pwa
+```
+
+The PWA tests use the production **Vite preview**, not the development server, to verify generated install icons, manifest, service worker control and a story completed while offline on desktop and emulated mobile. These are software tests; a physical-device install and real-user desirability are not yet confirmed.
+
 ## Interactive v0.5.1 - Dossier usability improvements
 
 - Replace the large sticky two-column Dossier with a full-width introduction and balanced, responsive panels.

@@ -59,6 +59,7 @@ export default function MessageSimulation({ onClose, onExplore, onComplete, alre
   const [earnedThisRun, setEarnedThisRun] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const chatRef = useRef<HTMLDivElement>(null)
   const phases: Phase[] = ['inbox', 'clue', 'verify', 'outcome']
   const step = phases.indexOf(phase) + 1
 
@@ -80,7 +81,10 @@ export default function MessageSimulation({ onClose, onExplore, onComplete, alre
     return () => { document.removeEventListener('keydown', onKeyDown); document.body.style.overflow = previousOverflow; restoreFocus?.focus() }
   }, [onClose])
 
-  useEffect(() => { if (dialogRef.current) dialogRef.current.scrollTop = 0 }, [phase])
+  useEffect(() => {
+    if (dialogRef.current) dialogRef.current.scrollTop = 0
+    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight
+  }, [phase])
 
   const reset = () => { setFirstAction(null); setFinalAction(null); setEarnedThisRun(false); setPhase('inbox') }
   const finish = () => {
@@ -107,7 +111,7 @@ export default function MessageSimulation({ onClose, onExplore, onComplete, alre
                 <div><strong>Unknown number</strong><small>Claims to be Mom</small></div>
                 <Phone size={18} aria-hidden="true" />
               </div>
-              <div className="message-chat" aria-live="polite">
+              <div className="message-chat" ref={chatRef} aria-live="polite">
                 <div className="message-date">TODAY · 14:32</div>
                 <div className="message-bubble incoming">Hi, it's Mom. My phone died. I'm using someone else's.</div>
                 <div className="message-bubble incoming">Can you send $320 to this new account? Please don't call - I'll explain later. ❤️</div>
