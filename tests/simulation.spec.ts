@@ -8,7 +8,7 @@ test('cautious reader checks identity instead of trusting a family detail', asyn
   await expect(dialog.getByText('Fictional messages')).toBeVisible()
   await dialog.getByRole('button', { name: /Ask something only Mom would know/ }).click()
   await dialog.getByRole('button', { name: /See what happens/ }).click()
-  await expect(dialog.getByText('Milo, of course.')).toBeVisible()
+  await expect(dialog.getByText('Milo, of course.', { exact: true })).toBeVisible()
   await dialog.getByRole('button', { name: /Read the next message/ }).click()
   await expect(dialog.getByText(/Milo.s name also appears in a public family post/)).toBeVisible()
   await dialog.getByRole('button', { name: /Verify through a saved number or trusted family contact/ }).click()
