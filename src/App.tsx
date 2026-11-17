@@ -5,11 +5,13 @@ import {
   MailWarning, Menu, MousePointerClick, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 
-type Topic = 'Human behavior' | 'Digital trust' | 'Everyday traps'
+type Topic = 'Decide' | 'Detect' | 'Play'
 type Scenario = {
   id: string
   number: string
   topic: Topic
+  kind?: 'story' | 'booking' | 'estimate' | 'comparison'
+  secondChoices?: string[]
   readTime: string
   title: string
   teaser: string
@@ -27,28 +29,30 @@ type Scenario = {
 
 const scenarios: Scenario[] = [
   {
-    id: 'ai-apology', number: '01', topic: 'Human behavior', readTime: '3 MIN',
+    id: 'ai-apology', number: '01', topic: 'Decide', readTime: '3 MIN',
     title: 'The apology written by AI',
     teaser: 'The words were perfect. But were they really theirs?',
     question: 'Your partner sends a thoughtful apology. Later, you find out an AI assistant wrote most of it. Does that make the apology less sincere?',
     choices: ['Yes. An apology should be in their own words.', 'No. The feelings can still be genuine.', 'I need to know more before deciding.'],
     revealTitle: 'One detail changes the story.',
     newEvidence: 'Your partner struggled to explain how they felt, but told the AI what happened, edited the draft, took responsibility and changed the behavior that hurt you.',
-    secondQuestion: 'Knowing this, how would you judge the apology?',
+    secondQuestion: 'What matters most when you reconsider the apology?',
+    secondChoices: ['AI involvement still makes it feel less personal to me.', 'The apology can be sincere when the feelings and accountability are real.', 'I would judge sincerity by what changes afterwards.'],
     explanationTitle: 'Authorship is not the same as sincerity.',
     explanation: 'A personally written message can still be manipulative. An AI-assisted message can communicate genuine intent. The more useful questions are whether the person takes responsibility, understands the harm and changes their behavior. Different people can reasonably value personal authorship differently.',
     takeaway: 'Look beyond how the message was written. Evaluate responsibility and actions over time.',
     challenge: 'In a different situation, would your judgment change if the person used AI to write a resignation letter?',
   },
   {
-    id: 'the-bank-call', number: '02', topic: 'Digital trust', readTime: '4 MIN',
+    id: 'the-bank-call', number: '02', topic: 'Detect', readTime: '4 MIN',
     title: 'The call from your bank',
     teaser: 'The caller ID matches. The urgency feels real.',
     question: 'Your bank appears to be calling from its genuine number. The caller says an unknown transfer is pending and you have five minutes to stop it. What do you do first?',
     choices: ['Follow their instructions to freeze the transfer.', 'Hang up and call the bank using a number I already trust.', 'Ask the caller for my account details to prove who they are.'],
     revealTitle: 'The phone number is not proof.',
     newEvidence: 'Caller ID can be spoofed. A fraudster may make a call appear to come from an organization you trust. A convincing voice and accurate details still do not authenticate the caller.',
-    secondQuestion: 'What is the safest next step?',
+    secondQuestion: 'What would you do now that caller ID may be spoofed?',
+    secondChoices: ['Keep talking because the displayed number matches.', 'End the call and independently contact the bank.', 'Ask the caller to verify their identity using my security code.'],
     explanationTitle: 'Verify through an independent channel.',
     explanation: 'A trustworthy way to verify an unexpected financial request is to end the conversation and contact your bank through the official app, card or a previously saved phone number. Do not use a contact number or link supplied by the suspicious caller. If you already shared information, promptly contact your bank.',
     takeaway: 'Urgency is not authentication. Independently verify unexpected money or credential requests.',
@@ -56,18 +60,66 @@ const scenarios: Scenario[] = [
     resource: { label: 'CISA: Recognize and Report Phishing', url: 'https://www.cisa.gov/secure-our-world/recognize-and-report-phishing' },
   },
   {
-    id: 'only-two-left', number: '03', topic: 'Everyday traps', readTime: '3 MIN',
+    id: 'only-two-left', number: '03', topic: 'Detect', kind: 'booking', readTime: '3 MIN',
     title: 'Only two rooms left',
     teaser: 'A timer is counting down. Should you rush?',
     question: 'You are comparing hotel rooms. A booking site says “Only 2 left!” and shows a countdown: 08:42. Would you book immediately?',
     choices: ['Yes. I do not want to lose the deal.', 'No. I will compare options and check the terms.', 'Maybe. It depends on the evidence and urgency.'],
     revealTitle: 'The timer has reset.',
     newEvidence: 'Twenty minutes later you revisit the page. The countdown has restarted at 10:00, and the same offer is still available.',
-    secondQuestion: 'How would you respond now?',
+    secondQuestion: 'What is your next move now?',
+    secondChoices: ['Book immediately anyway.', 'Compare the final price, cancellation terms and alternatives.', 'Assume every limited offer is fraudulent.'],
     explanationTitle: 'Scarcity claims need context.',
     explanation: 'Limited availability can be genuine, but an unexplained or resetting timer may be a pressure tactic. One observation does not prove fraud. Compare final prices, cancellation rules and independently available offers before deciding.',
     takeaway: 'A countdown is a claim, not a deadline you must obey. Check what is actually being limited.',
     challenge: 'If the offer is truly limited, what evidence would help you make a confident decision?',
+  },
+
+  {
+    id: 'the-third-cancellation', number: '04', topic: 'Decide', readTime: '3 MIN',
+    title: 'The friend who always cancels',
+    teaser: 'The third cancelled plan. Is it really about you?',
+    question: 'A close friend cancels dinner for the third time with a vague “Something came up.” You feel brushed aside. What would you do?',
+    choices: ['Assume they no longer value our friendship.', 'Ask how they are doing before reaching a conclusion.', 'Stop inviting them without mentioning why.'],
+    revealTitle: 'There was more going on.',
+    newEvidence: 'You learn that your friend has been helping a parent through a difficult period and did not want to discuss family matters yet. They still should have communicated more clearly.',
+    secondQuestion: 'Which response now seems most constructive?',
+    secondChoices: ['Say how the cancellations affected me and ask what would work better.', 'Insist they explain every private detail.', 'Pretend nothing happened and keep feeling resentful.'],
+    explanationTitle: 'Context can change the story, not erase its impact.',
+    explanation: 'People often interpret vague behavior through their own experience, but several explanations may fit the same facts. Learning the context does not mean your disappointment was imaginary. A practical next step is a clear conversation rather than mind-reading.',
+    takeaway: 'Ask before assuming, then explain your own needs without demanding private details.',
+    challenge: 'What if your friend had a pattern of cancelling even when life was calm?',
+  },
+  {
+    id: 'gut-vs-data', number: '05', topic: 'Play', kind: 'estimate', readTime: '2 MIN',
+    title: 'Gut vs. Data: how many use Facebook?',
+    teaser: 'Make a prediction before you see the survey.',
+    question: 'Before seeing the figures, estimate what share of U.S. adults said they ever use Facebook in a Pew Research Center survey conducted in 2025.',
+    choices: [],
+    revealTitle: 'The survey says 71%.',
+    newEvidence: 'Pew Research Center surveyed 5,022 U.S. adults between February 5 and June 18, 2025. In that survey, 71% said they ever use Facebook.',
+    secondQuestion: 'Which source would give you the strongest evidence for that national estimate?',
+    secondChoices: ['A survey report showing the sample, question and methodology.', 'My own social circle and its habits.', 'The number of reactions to a viral Facebook post.'],
+    explanationTitle: 'A number needs its denominator.',
+    explanation: 'This 71% figure describes reported use among U.S. adults in a particular survey, not daily activity or global use. It is not a personal score. Good statistical thinking asks who was surveyed, how the question was worded and how the sample was selected.',
+    takeaway: 'When a statistic surprises you, check the population, year and definition before trusting or rejecting it.',
+    challenge: 'How differently would you predict the share of daily Facebook users?',
+    resource: { label: 'Pew Research Center: Americans’ Social Media Use 2025', url: 'https://www.pewresearch.org/internet/2025/11/20/americans-social-media-use-2025/' },
+  },
+  {
+    id: 'the-better-deal', number: '06', topic: 'Play', kind: 'comparison', readTime: '2 MIN',
+    title: 'The better deal',
+    teaser: 'A bigger pack looks cheaper. Is it?',
+    question: 'You want one bag of coffee. Bag A is 750 g for $12. Bag B is 1 kg for $15. Which has the lower price per kilogram before delivery?',
+    choices: ['Bag A: $12 for 750 g', 'Bag B: $15 for 1 kg', 'They cost the same per kilogram'],
+    revealTitle: 'Now include delivery.',
+    newEvidence: 'Bag A ships free. Bag B has a $4 delivery fee. You are buying exactly one bag, so the full delivery fee belongs in your comparison.',
+    secondQuestion: 'Which is now cheaper per kilogram delivered?',
+    secondChoices: ['Bag A: $12 ÷ 0.75 kg = $16/kg', 'Bag B: $19 ÷ 1 kg = $19/kg', 'They still cost exactly the same'],
+    explanationTitle: 'The cheapest sticker price is not the full cost.',
+    explanation: 'Before delivery, Bag A costs $16/kg while Bag B costs $15/kg. With a $4 delivery charge on Bag B, it becomes $19/kg. Bag A is now cheaper per kilogram for this one-bag purchase. Discounts, shipping and minimum quantities can reverse a comparison.',
+    takeaway: 'Compare the same unit after adding the costs that apply to your actual purchase.',
+    challenge: 'What if you ordered three bags and the shipping fee stayed fixed at $4?',
   },
 ]
 
