@@ -125,10 +125,13 @@ const scenarios: Scenario[] = [
 
 type Phase = 'decide' | 'reveal' | 'reconsider' | 'learn'
 
-function ScenarioExperience({ scenario, onClose }: { scenario: Scenario; onClose: () => void }) {
+function ScenarioExperience({ scenario, onClose, onNext }: { scenario: Scenario; onClose: () => void; onNext: () => void }) {
   const [phase, setPhase] = useState<Phase>('decide')
   const [first, setFirst] = useState<number | null>(null)
   const [second, setSecond] = useState<number | null>(null)
+  const [estimate, setEstimate] = useState(50)
+  const [showFinePrint, setShowFinePrint] = useState(false)
+  const secondChoices = scenario.secondChoices ?? scenario.choices
   const phases: Phase[] = ['decide', 'reveal', 'reconsider', 'learn']
   const currentIndex = phases.indexOf(phase)
   const close = () => { onClose() }
@@ -156,34 +159,38 @@ function ScenarioExperience({ scenario, onClose }: { scenario: Scenario; onClose
           {phase === 'decide' && <>
             <h2>{scenario.title}</h2>
             <p className="experience-question">{scenario.question}</p>
-            <div className="options-list" role="radiogroup" aria-label="Choose your first answer">
-              {scenario.choices.map((text, i) => <button className={`option ${first === i ? 'selected' : ''}`} key={i} type="button" role="radio" aria-checked={first === i} onClick={() => setFirst(i)}><span className="option-letter">{String.fromCharCode(65 + i)}</span><span>{text}</span>{first === i && <Check size={18} className="option-check"/>}</button>)}
-            </div>
-            <button disabled={first === null} className="button-primary wide" onClick={() => setPhase('reveal')}>Reveal new information <ArrowRight size={18}/></button>
+            {scenario.kind === 'comparison' && <div className="mini-deals" aria-label="Compare coffee offers"><div><small>OPTION A</small><strong>750 g</strong><span>$12.00</span><small>Before delivery</small></div><div><small>OPTION B</small><strong>1 kg</strong><span>$15.00</span><small>Before delivery</small></div></div>}
+            {scenario.kind === 'booking' && <div className="mock-offer" aria-label="Fictional hotel booking offer"><small>SIMULATED BOOKING PAGE</small><strong>Only 2 rooms left!</strong><span>Offer timer: 08:42</span><button type="button" className="mock-terms-button" onClick={() => setShowFinePrint(v => !v)} aria-expanded={showFinePrint}>{showFinePrint ? 'Hide' : 'Inspect'} booking terms <ArrowRight size={14}/></button>{showFinePrint && <p>Cancellation fees apply after booking. Displayed availability and countdown are not independently verified.</p>}</div>}
+            {scenario.kind === 'estimate' ? <div className="estimate-panel"><label htmlFor="estimate-percentage">Your estimate: <strong>{estimate}%</strong></label><input id="estimate-percentage" aria-label="Percentage of U.S. adults" type="range" min="0" max="100" step="1" value={estimate} onChange={e => setEstimate(Number(e.target.value))}/><div className="range-axis"><span>0%</span><span>100%</span></div><p>Use the slider to lock in your guess. The actual result appears only after you continue.</p></div> : <div className="options-list" role="group" aria-label="Choose your first answer">
+              {scenario.choices.map((text, i) => <button className={`option ${first === i ? 'selected' : ''}`} key={i} type="button" aria-pressed={first === i} onClick={() => setFirst(i)}><span className="option-letter">{String.fromCharCode(65 + i)}</span><span>{text}</span>{first === i && <Check size={18} className="option-check"/>}</button>)}
+            </div>}
+            <button disabled={scenario.kind !== 'estimate' && first === null} className="button-primary wide" onClick={() => setPhase('reveal')}>Reveal new information <ArrowRight size={18}/></button>
           </>}
           {phase === 'reveal' && <>
             <div className="reveal-symbol"><Sparkles size={26}/></div>
             <h2>{scenario.revealTitle}</h2>
             <p className="experience-question">{scenario.newEvidence}</p>
-            <div className="choice-recap"><span>YOUR ORIGINAL DECISION</span><strong>{first !== null ? scenario.choices[first] : 'Not selected'}</strong></div>
+            {scenario.kind === 'estimate' && <div className="estimate-results"><div><span>YOUR ESTIMATE</span><strong>{estimate}%</strong><span className="estimate-meter"><i style={{width: `${estimate}%`}}/></span></div><div><span>PEW RESEARCH 2025</span><strong>71%</strong><span className="estimate-meter published"><i style={{width:'71%'}}/></span></div><p>Your estimate differed by {Math.abs(estimate - 71)} percentage points. The question measured reported use, not daily activity.</p></div>}
+            <div className="choice-recap"><span>{scenario.kind === 'estimate' ? 'YOUR ORIGINAL ESTIMATE' : 'YOUR ORIGINAL DECISION'}</span><strong>{scenario.kind === 'estimate' ? `${estimate}%` : first !== null ? scenario.choices[first] : 'Not selected'}</strong></div>
             <button className="button-primary wide" onClick={() => setPhase('reconsider')}>Take a second look <ArrowRight size={18}/></button>
           </>}
           {phase === 'reconsider' && <>
             <h2>Would you decide differently?</h2>
             <p className="experience-question">{scenario.secondQuestion}</p>
-            <div className="options-list" role="radiogroup" aria-label="Choose your second answer">
-              {scenario.choices.map((text, i) => <button className={`option ${second === i ? 'selected' : ''}`} key={i} type="button" role="radio" aria-checked={second === i} onClick={() => setSecond(i)}><span className="option-letter">{String.fromCharCode(65 + i)}</span><span>{text}</span>{second === i && <Check size={18} className="option-check"/>}</button>)}
+            <div className="options-list" role="group" aria-label="Choose your answer after the new information">
+              {secondChoices.map((text, i) => <button className={`option ${second === i ? 'selected' : ''}`} key={i} type="button" aria-pressed={second === i} onClick={() => setSecond(i)}><span className="option-letter">{String.fromCharCode(65 + i)}</span><span>{text}</span>{second === i && <Check size={18} className="option-check"/>}</button>)}
             </div>
             <button disabled={second === null} className="button-primary wide" onClick={() => setPhase('learn')}>See the explanation <ArrowRight size={18}/></button>
           </>}
           {phase === 'learn' && <>
-            <div className="result-pill"><Check size={14}/>{first === second ? 'Your decision stayed the same' : 'You reconsidered your decision'}</div>
+            <div className="result-pill"><Check size={14}/>Second look completed</div>
+            <div className="decision-review"><div><span>FIRST RESPONSE</span><strong>{scenario.kind === 'estimate' ? `${estimate}%` : first === null ? 'Not recorded' : scenario.choices[first]}</strong></div><ArrowRight size={17} aria-hidden="true"/><div><span>AFTER NEW EVIDENCE</span><strong>{second === null ? 'Not recorded' : secondChoices[second]}</strong></div></div>
             <h2>{scenario.explanationTitle}</h2>
             <p className="experience-question smaller">{scenario.explanation}</p>
             <div className="takeaway"><div className="takeaway-icon"><ShieldCheck size={20}/></div><div><strong>THE TAKEAWAY</strong><p>{scenario.takeaway}</p></div></div>
             <div className="challenge"><strong>TRY THE IDEA AGAIN</strong><p>{scenario.challenge}</p></div>
             {scenario.resource && <a className="resource-link" target="_blank" rel="noopener noreferrer" href={scenario.resource.url}>Further reading: {scenario.resource.label} <ArrowUpRight size={14}/></a>}
-            <div className="result-actions"><button className="button-outline" onClick={() => {setPhase('decide'); setFirst(null); setSecond(null)}}>Try again</button><button className="button-primary" onClick={close}>Back to the Lab <ArrowRight size={17}/></button></div>
+            <div className="result-actions"><button className="button-outline" onClick={() => {setPhase('decide'); setFirst(null); setSecond(null); setEstimate(50); setShowFinePrint(false)}}>Try again</button><button className="button-primary" onClick={onNext}>Try another <ArrowRight size={17}/></button><button className="button-outline" onClick={close}>Back to the Lab</button></div>
           </>}
         </div>
         <div className="experience-footer"><LockKeyhole size={14}/> Fictional scenario • Private practice only • No responses collected</div>
