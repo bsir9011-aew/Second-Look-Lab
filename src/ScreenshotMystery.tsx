@@ -93,6 +93,7 @@ export default function ScreenshotMystery({ onClose, onComplete, onExplore, alre
   const [firstAction, setFirstAction] = useState<FirstAction | null>(null)
   const [lastAction, setLastAction] = useState<LastAction | null>(null)
   const [inspected, setInspected] = useState<ClueId[]>([])
+  const [expandedClue, setExpandedClue] = useState<ClueId | null>(null)
   const [earnedThisRun, setEarnedThisRun] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -125,7 +126,8 @@ export default function ScreenshotMystery({ onClose, onComplete, onExplore, alre
   }, [phase])
 
   function revealClue(id: ClueId) {
-    setInspected(current => current.includes(id) ? current.filter(clue => clue !== id) : [...current, id])
+    setExpandedClue(current => current === id ? null : id)
+    setInspected(current => current.includes(id) ? current : [...current, id])
   }
   function finish() {
     if (!lastAction) return
@@ -138,6 +140,7 @@ export default function ScreenshotMystery({ onClose, onComplete, onExplore, alre
     setFirstAction(null)
     setLastAction(null)
     setInspected([])
+    setExpandedClue(null)
     setEarnedThisRun(false)
   }
 
@@ -196,10 +199,11 @@ export default function ScreenshotMystery({ onClose, onComplete, onExplore, alre
               <p>There are three pieces of evidence. Open at least two to make a second decision. The order is yours.</p>
               <div className="screenshot-clues">
                 {clues.map(clue => {
-                  const revealed = inspected.includes(clue.id)
-                  return <div key={clue.id} className={'screenshot-clue' + (revealed ? ' revealed' : '')}>
+                  const revealed = expandedClue === clue.id
+                  const visited = inspected.includes(clue.id)
+                  return <div key={clue.id} className={'screenshot-clue' + (visited ? ' revealed' : '')}>
                     <button type="button" aria-expanded={revealed} aria-controls={'clue-' + clue.id} onClick={() => revealClue(clue.id)}>
-                      <span className="screenshot-clue-number">{revealed ? <CheckCircle2 size={18}/> : <Search size={18}/>}</span>
+                      <span className="screenshot-clue-number">{visited ? <CheckCircle2 size={18}/> : <Search size={18}/>}</span>
                       <span><small>{clue.eyebrow}</small><strong>{clue.title}</strong><em>{clue.preview}</em></span>
                       <span className="screenshot-clue-toggle">{revealed ? 'Hide' : 'Inspect'}</span>
                     </button>
