@@ -2,6 +2,24 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
+## Interactive v0.7 - The Screenshot mystery
+
+**The Screenshot** is a new five-act fictional investigative story with a stronger game loop:
+1. Receive a cropped screenshot implying fraud at a community fundraiser.
+2. Choose whether to broadcast, ask privately, or pause and check the source; see a distinct immediate consequence.
+3. Inspect a board of three independently expandable artifacts (full conversation, uncropped rehearsal slide, and public livestream record), in any order.
+4. Reconsider the claim after learning that the screenshot is authentic, but its cropped framing is misleading.
+5. Choose how to handle the spreading rumor and see one of **three genuinely different endings**.
+
+This story does not use actual charity records, made-up audience vote totals or pretend user data. It explores why a real quote can mislead without source context and why correcting a circulating rumor calls for verifiable evidence.
+
+- Reach the story via the homepage's new prominent banner, the primary hero CTA, or the **Dossier**.
+- It counts as an eighth unique experience in **Detect**, granting 120 discovery XP only once. Alternate paths remain playable with no additional XP.
+- Uses the existing v2 local storage and JSON Lab Passport format: old progress imports unchanged; old backups remain valid.
+- Focus Mode hides XP banners in the mystery. No choices are stored, recorded or transmitted.
+- Included in offline PWA app shell. Dedicated Playwright tests cover the evidence board, three endings, mobile layout, keyboard Escape, replay protection, Focus Mode, and offline completion.
+- Caveat: this is a new simulated story whose enjoyability has not been established with real users. The outcomes are educational scenarios, not psychological assessments.
+
 ## Mobile Lab v0.6 - installable PWA
 
 This is still the same public Second Look Lab website. It can now be installed as a **Progressive Web App** (PWA) where the browser supports it, without an app store or an account.
