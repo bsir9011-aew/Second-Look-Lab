@@ -40,9 +40,12 @@ test('Lenses, collection and badges reflect real unique completed experiences', 
 })
 
 test('Passport import merges saved and incoming experiences; invalid IDs are rejected', async ({ page }) => {
-  await page.addInitScript(key => localStorage.setItem(key, JSON.stringify({
-    schemaVersion: 2, completed: ['ai-apology'], focusMode: false,
-  })), version2)
+  await page.addInitScript(key => {
+    // Seed once; do not overwrite real persisted progress on later page reloads.
+    if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({
+      schemaVersion: 2, completed: ['ai-apology'], focusMode: false,
+    }))
+  }, version2)
   await page.goto('/')
   const panel = page.locator('#my-progress')
   await panel.locator('.dossier-passport summary').click()
