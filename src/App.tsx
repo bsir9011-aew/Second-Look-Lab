@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import MessageSimulation from './MessageSimulation'
 import JourneyDashboard from './JourneyDashboard'
+import MobileInstallCard from './MobileInstallCard'
+import './mobile-lab.css'
 import { useLabJourney, type ExperienceId, XP_PER_EXPERIENCE } from './labJourney'
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check,
+  ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, Compass, House, UserRound,
   CircleHelp, Clock3, Eye, Fingerprint, HeartHandshake, Layers3, LockKeyhole,
   MailWarning, Menu, MousePointerClick, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
@@ -227,9 +229,15 @@ function App() {
   }
   const go = (id: string) => {setMenuOpen(false); const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; document.getElementById(id)?.scrollIntoView({behavior:reduced?'auto':'smooth'}) }
   const viewTopic = (value: 'All' | Topic) => {setTopic(value);go('stories')}
+  useEffect(() => {
+    // PWA manifest shortcuts work for a cold launch and for an offline start.
+    const launch = new URLSearchParams(window.location.search).get('launch')
+    const target = launch === 'stories' ? 'stories' : launch === 'dossier' ? 'my-progress' : null
+    if (target) window.requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ behavior: 'auto' }))
+  }, [])
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 05.1 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 06 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
@@ -319,6 +327,7 @@ function App() {
       </section>
 
       <JourneyDashboard stats={journey} completed={journey.completed} focusMode={journey.focusMode} passport={journey.passport} onReset={journey.resetJourney} onOpenExperience={openExperience} onFocusChange={journey.setFocusMode} onImport={journey.importPassport}/>
+      <MobileInstallCard/>
       <section className="method-section section-padding" id="how-it-works">
         <div className="container method-layout">
           <div className="method-copy"><div className="eyebrow light"><span className="line"/> THE SECOND LOOK METHOD</div><h2>First, decide.<br/><em>Then discover.</em></h2><p>Choose your first answer, uncover a new detail, then think again. Sometimes there is a clear lesson; sometimes the interesting part is noticing your own assumptions.</p><button className="button-light" onClick={() => setActiveScenario(scenarios[0])}>Try a 3-minute scenario <ArrowUpRight size={18}/></button></div>
@@ -332,7 +341,12 @@ function App() {
 
       <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.5.1</span></div></footer>
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.6</span></div></footer>
+    <nav className="mobile-bottom-nav" aria-label="Quick mobile navigation">
+      <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><House size={20} aria-hidden="true"/><span>Home</span></button>
+      <button type="button" onClick={() => go('stories')}><Compass size={20} aria-hidden="true"/><span>Play</span></button>
+      <button type="button" onClick={() => go('my-progress')}><UserRound size={20} aria-hidden="true"/><span>Dossier</span></button>
+    </nav>
     {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} onComplete={journey.markCompleted} alreadyCompleted={journey.completed.includes(activeScenario.id as ExperienceId)} focusMode={journey.focusMode}/>}
     {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} onComplete={() => journey.markCompleted('the-family-text')} alreadyCompleted={journey.completed.includes('the-family-text')} focusMode={journey.focusMode}/>}
   </>
