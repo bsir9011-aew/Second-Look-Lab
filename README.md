@@ -2,7 +2,13 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
-## Interactive v0.2
+## Interactive v0.3
+
+New **The Family Text** experience: a fictional, branching SMS story with a simulated phone screen, an initial decision, new evidence, an independent-verification choice and contextual feedback. The interface never asks for real personal data or transfers money. It is shown as a featured immersive story on the homepage.
+
+The original six scenarios remain available under Decide / Detect / Play.
+
+### v0.2 scenario library
 
 Six original experiences across **Decide / Detect / Play**:
 
@@ -30,15 +36,18 @@ Other features:
 npm install
 npm run dev
 npm run build
+npm run test:e2e
 ```
 
 Vite builds a static site; `src/styles.css` retains the original editorial styling and `src/v02.css` extends it for interactive components. No backend needed for this MVP.
 
 ### Automated verification and deployment
 
-- `.github/workflows/verify.yml` runs `npm run build` on pull requests and the feature branch.
+- `.github/workflows/verify.yml` runs the TypeScript/Vite build and 8 scripted Chromium browser journeys (desktop and mobile) on pull requests. These tests check software behavior; they are **not** human usability feedback.
 - `.github/workflows/deploy.yml` deploys `main` to GitHub Pages.
 - Pages **Source** needs to be set to **GitHub Actions**.
+
+A small-group usability protocol for 5-8 real people is available in [`docs/TESTING.md`](docs/TESTING.md). Synthetic persona feedback is not presented as feedback from real visitors.
 
 ## Boundaries and next steps
 
