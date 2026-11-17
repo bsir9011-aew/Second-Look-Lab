@@ -60,6 +60,6 @@ test('stored progress sanitizes unknown IDs, duplicates and malformed values', a
   })
   await page.goto('/')
   const panel = page.locator('#my-progress')
-  await expect(panel.getByText('1 / 7 unique')).toBeVisible()
+  await expect(panel.getByText('1 / 8 unique')).toBeVisible()
   await expect(panel.getByText('120 XP', { exact: true })).toBeVisible()
 })
