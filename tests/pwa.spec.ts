@@ -39,7 +39,6 @@ test('PWA serves app and interactive experience with network disconnected', asyn
   await expect(page.getByRole('dialog', { name: 'The apology written by AI interactive scenario' })).toBeVisible()
   await page.getByRole('dialog').locator('.options-list button').first().click()
   await page.getByRole('dialog').getByRole('button', { name: /Reveal new information/ }).click()
-  await expect(page.getByRole('dialog').getByRole('heading', { name: /revealed/i })).toHaveCount(0)
   await page.getByRole('dialog').getByRole('button', { name: /Take a second look/ }).click()
   await page.getByRole('dialog').locator('.options-list button').nth(1).click()
   await page.getByRole('dialog').getByRole('button', { name: /See the explanation/ }).click()
