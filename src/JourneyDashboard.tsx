@@ -93,6 +93,8 @@ export default function JourneyDashboard({
         </div>
 
         <div className="journey-card">
+          <div className="dossier-top-grid">
+            <div className="dossier-rank-block">
           {!focusMode ? <>
             <div className="journey-card-head">
               <div className="journey-level-icon"><Award size={28}/></div>
@@ -109,6 +111,8 @@ export default function JourneyDashboard({
             </div>
           </> : <div className="dossier-focus-notice"><EyeOff size={19}/><div><strong>Focus Mode is on.</strong><span>Levels and badges are hidden. Your progress is still safely recorded in this browser.</span></div></div>}
 
+            </div>
+            <div className="dossier-lenses-block">
           <div className="dossier-subhead"><Layers3 size={17}/><strong>THREE LENSES</strong><small>Where you've explored</small></div>
           <div className="dossier-lenses">
             {stats.lenses.map(lens => <div className="dossier-lens" key={lens.id}>
@@ -120,6 +124,10 @@ export default function JourneyDashboard({
             </div>)}
           </div>
 
+            </div>
+          </div>
+          <div className={'dossier-content-grid' + (focusMode ? ' focus-only' : '')}>
+            <div className="dossier-collection-block">
           <div className="dossier-subhead"><BookOpen size={17}/><strong>FEATURED COLLECTION</strong><small>{stats.collection.completedCount} / {stats.collection.total} discovered</small></div>
           <div className="dossier-collection">
             <div><strong>{stats.collection.name}</strong><p>{stats.collection.description}</p></div>
@@ -135,7 +143,8 @@ export default function JourneyDashboard({
             {stats.collection.done && <span className="dossier-collection-complete"><Check size={14}/> Collection complete</span>}
           </div>
 
-          {!focusMode && <>
+            </div>
+            {!focusMode && <div className="dossier-badges-block">
             <div className="dossier-subhead"><Medal size={17}/><strong>DISCOVERIES</strong><small>{stats.badges.filter(b => b.earned).length} / {stats.badges.length} badges</small></div>
             <div className="dossier-badges">
               {stats.badges.map(badge => <div key={badge.id} className={'dossier-badge' + (badge.earned ? ' unlocked' : '')} title={badge.description}>
@@ -143,7 +152,8 @@ export default function JourneyDashboard({
                 <div><strong>{badge.name}</strong><small>{badge.description}</small></div>
               </div>)}
             </div>
-          </>}
+            </div>}
+          </div>
 
           <details className="dossier-passport">
             <summary><FileKey size={17}/> LAB PASSPORT · Backup & transfer <ChevronDown size={16}/></summary>
