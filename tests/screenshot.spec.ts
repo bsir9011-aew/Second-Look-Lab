@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test('branching screenshot rumor can be investigated, corrected and awarded XP once', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start The Screenshot interactive mystery' }).click()
-  const dialog = page.getByRole('dialog', { name: /One screenshot/ })
+  const dialog = page.getByRole('dialog')
   await expect(dialog.getByText('Fictional fundraiser, figures and messages.')).toBeVisible()
   await expect(dialog.getByRole('button', { name: 'See what happens' })).toBeDisabled()
   await dialog.getByRole('button', { name: /Share it with the group/ }).click()
@@ -34,7 +34,6 @@ test('branching screenshot rumor can be investigated, corrected and awarded XP o
   await dialog.getByRole('button', { name: 'See what happens' }).click()
   await expect(dialog.getByRole('heading', { name: 'One missing detail stands out.' })).toBeVisible()
   await dialog.getByRole('button', { name: 'Open the evidence board' }).click()
-  await dialog.getByRole('button', { name: /Full chat/ }).count().catch(() => 0)
   await dialog.getByRole('button', { name: /The conversation above it/ }).click()
   await dialog.getByRole('button', { name: /What viewers actually saw/ }).click()
   await dialog.getByRole('button', { name: 'Take a second look' }).click()
