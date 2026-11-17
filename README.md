@@ -2,6 +2,15 @@
 
 **Interactive decision entertainment** - a public, English-language experiment in decisions, everyday traps, and playful evidence-based learning. This is **not** the future enterprise/B2B training platform.
 
+## Interactive v0.5.1 - Dossier usability improvements
+
+- Replace the large sticky two-column Dossier with a full-width introduction and balanced, responsive panels.
+- Add a **Next Discovery** button recommending an actually unfinished story (featured collection first; then the rest of the library). If every current story is explored, offer a replay without claiming that new content exists.
+- Make the **Trust & Deception** entries clickable, opening the correct story including the separate immersive Family Text simulation. Already completed entries offer replay.
+- Make the full experience index expandable and playable, keeping the default page shorter without losing access.
+- Preserve rank, XP, Focus Mode, Passport and all existing saved progress. Navigation changes do not affect awards.
+- Validate desktop and emulated mobile usability via Playwright; these are software checks, not human feedback.
+
 ## Interactive v0.5 - The Second Look Dossier
 
 The existing level system is extended, not replaced:
