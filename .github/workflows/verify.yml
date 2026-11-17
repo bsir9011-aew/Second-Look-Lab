@@ -2,7 +2,7 @@ name: Verify Interactive Lab
 
 on:
   push:
-    branches: [feature/dossier-passport-v05, feature/local-levels-v04, feature/message-simulation-v03, feature/interactive-lab-v02]
+    branches: [feature/mobile-lab-pwa-v06, feature/dossier-passport-v05, feature/local-levels-v04, feature/message-simulation-v03, feature/interactive-lab-v02]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -26,3 +26,5 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Scripted browser journeys (desktop and mobile)
         run: npm run test:e2e
+      - name: Production PWA installability and offline journeys
+        run: npm run test:pwa
