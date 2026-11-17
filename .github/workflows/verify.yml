@@ -2,7 +2,7 @@ name: Verify Interactive Lab
 
 on:
   push:
-    branches: [feature/local-levels-v04, feature/message-simulation-v03, feature/interactive-lab-v02]
+    branches: [feature/dossier-passport-v05, feature/local-levels-v04, feature/message-simulation-v03, feature/interactive-lab-v02]
   pull_request:
     branches: [main]
   workflow_dispatch:

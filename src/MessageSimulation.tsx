@@ -49,9 +49,10 @@ type Props = {
   onExplore: () => void
   onComplete: () => void
   alreadyCompleted: boolean
+  focusMode: boolean
 }
 
-export default function MessageSimulation({ onClose, onExplore, onComplete, alreadyCompleted }: Props) {
+export default function MessageSimulation({ onClose, onExplore, onComplete, alreadyCompleted, focusMode }: Props) {
   const [phase, setPhase] = useState<Phase>('inbox')
   const [firstAction, setFirstAction] = useState<FirstAction | null>(null)
   const [finalAction, setFinalAction] = useState<FinalAction | null>(null)
@@ -160,7 +161,7 @@ export default function MessageSimulation({ onClose, onExplore, onComplete, alre
               </>}
               {phase === 'outcome' && finalAction !== null && <>
                 <div className={'message-result-tag ' + finalConsequences[finalAction].tone}><ShieldCheck size={16}/>{finalAction === 'verify' ? 'SAFER RESPONSE' : 'RISK TO RECONSIDER'}</div>
-                <div className={'journey-earned' + (earnedThisRun ? '' : ' replayed')}><Check size={14}/>{earnedThisRun ? '+' + XP_PER_EXPERIENCE + ' discovery XP · New experience' : 'Previously explored · No repeat XP'}</div>
+                {!focusMode && <div className={'journey-earned' + (earnedThisRun ? '' : ' replayed')}><Check size={14}/>{earnedThisRun ? '+' + XP_PER_EXPERIENCE + ' discovery XP · New experience' : 'Previously explored · No repeat XP'}</div>}
                 <h2 id="message-dialog-title">{finalConsequences[finalAction].title}</h2>
                 <p>{finalConsequences[finalAction].text}</p>
                 <div className="message-action-path"><span>PRESSURE</span><ArrowRight size={14}/><span>IDENTITY CLAIM</span><ArrowRight size={14}/><strong>INDEPENDENT VERIFICATION</strong></div>

@@ -128,7 +128,7 @@ const scenarios: Scenario[] = [
 
 type Phase = 'decide' | 'reveal' | 'reconsider' | 'learn'
 
-function ScenarioExperience({ scenario, onClose, onNext, onComplete, alreadyCompleted }: { scenario: Scenario; onClose: () => void; onNext: () => void; onComplete: (id: ExperienceId) => void; alreadyCompleted: boolean }) {
+function ScenarioExperience({ scenario, onClose, onNext, onComplete, alreadyCompleted, focusMode }: { scenario: Scenario; onClose: () => void; onNext: () => void; onComplete: (id: ExperienceId) => void; alreadyCompleted: boolean; focusMode: boolean }) {
   const [phase, setPhase] = useState<Phase>('decide')
   const [first, setFirst] = useState<number | null>(null)
   const [second, setSecond] = useState<number | null>(null)
@@ -188,7 +188,7 @@ function ScenarioExperience({ scenario, onClose, onNext, onComplete, alreadyComp
           </>}
           {phase === 'learn' && <>
             <div className="result-pill"><Check size={14}/>Second look completed</div>
-            <div className={'journey-earned' + (earnedThisRun ? '' : ' replayed')}><Sparkles size={14}/>{earnedThisRun ? '+' + XP_PER_EXPERIENCE + ' discovery XP · New experience' : 'Previously explored · No repeat XP'}</div>
+            {!focusMode && <div className={'journey-earned' + (earnedThisRun ? '' : ' replayed')}><Sparkles size={14}/>{earnedThisRun ? '+' + XP_PER_EXPERIENCE + ' discovery XP · New experience' : 'Previously explored · No repeat XP'}</div>}
             <div className="decision-review"><div><span>FIRST RESPONSE</span><strong>{scenario.kind === 'estimate' ? `${estimate}%` : first === null ? 'Not recorded' : scenario.choices[first]}</strong></div><ArrowRight size={17} aria-hidden="true"/><div><span>AFTER NEW EVIDENCE</span><strong>{second === null ? 'Not recorded' : secondChoices[second]}</strong></div></div>
             <h2>{scenario.explanationTitle}</h2>
             <p className="experience-question smaller">{scenario.explanation}</p>
@@ -217,7 +217,7 @@ function App() {
   const viewTopic = (value: 'All' | Topic) => {setTopic(value);go('stories')}
 
   return <>
-    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 04 <ArrowUpRight size={13}/></span></div>
+    <div className="announcement"><span className="announcement-dot"/> AN INDEPENDENT EXPERIMENT IN BETTER THINKING <span className="announcement-right">EARLY ACCESS • VOL. 05 <ArrowUpRight size={13}/></span></div>
     <header className="site-header">
       <div className="container header-inner">
         <button className="brand" onClick={() => window.scrollTo({top:0,behavior:'smooth'})} aria-label="Second Look Lab home">
@@ -228,7 +228,7 @@ function App() {
           <button onClick={() => viewTopic('Detect')}>Detect</button>
           <button onClick={() => viewTopic('Play')}>Play</button>
           <button onClick={() => go('live')}>Live story</button>
-          <button onClick={() => go('my-progress')}>My level · {journey.level}</button>
+          <button onClick={() => go('my-progress')}>My Dossier</button>
           <button onClick={() => go('how-it-works')}>How it works</button>
           <button onClick={() => go('science')}>The science</button>
         </nav>
@@ -265,7 +265,6 @@ function App() {
         <div className="container intro-strip-inner"><div className="intro-label"><Sparkles size={17}/> OUR IDEA IN A SENTENCE</div><p>Not here to tell you <em>what</em> to think. Here to explore <em>how</em> we think.</p><span className="intro-asterisk">✳</span></div>
       </section>
 
-      <JourneyDashboard stats={journey} completed={journey.completed} onReset={journey.resetJourney} onTry={() => go('stories')}/>
       <section className="simulation-spotlight" id="live">
         <div className="container simulation-spotlight-grid">
           <div className="simulation-copy">
@@ -307,6 +306,7 @@ function App() {
         </div>
       </section>
 
+      <JourneyDashboard stats={journey} completed={journey.completed} focusMode={journey.focusMode} passport={journey.passport} onReset={journey.resetJourney} onTry={() => go('stories')} onFocusChange={journey.setFocusMode} onImport={journey.importPassport}/>
       <section className="method-section section-padding" id="how-it-works">
         <div className="container method-layout">
           <div className="method-copy"><div className="eyebrow light"><span className="line"/> THE SECOND LOOK METHOD</div><h2>First, decide.<br/><em>Then discover.</em></h2><p>Choose your first answer, uncover a new detail, then think again. Sometimes there is a clear lesson; sometimes the interesting part is noticing your own assumptions.</p><button className="button-light" onClick={() => setActiveScenario(scenarios[0])}>Try a 3-minute scenario <ArrowUpRight size={18}/></button></div>
@@ -320,9 +320,9 @@ function App() {
 
       <section className="newsletter-section" id="about"><div className="container newsletter-layout"><div><div className="eyebrow light"><span className="line"/> AN INDEPENDENT PROJECT</div><h2>Look closer.<br/><em>Think better.</em></h2><p>Second Look Lab is an early public experiment in interactive stories, everyday choices and playful learning. We're building useful, original stories before building a business.</p><div className="label-row"><span><Check size={14}/> No fake testimonials</span><span><Check size={14}/> No pretend survey results</span><span><Check size={14}/> No spam</span></div></div><aside className="org-card"><span className="org-icon"><MailWarning size={26}/></span><div className="eyebrow emerald">FOR TEAMS & ORGANIZATIONS</div><h3>Imagine training that makes people think.</h3><p>We're exploring a future library of interactive scenarios for security awareness and AI literacy. This is a concept in development, not a product for sale yet.</p><span className="org-status"><span/> RESEARCH STAGE</span></aside></div></section>
     </main>
-    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.4</span></div></footer>
-    {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} onComplete={journey.markCompleted} alreadyCompleted={journey.completed.includes(activeScenario.id as ExperienceId)} />}
-    {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} onComplete={() => journey.markCompleted('the-family-text')} alreadyCompleted={journey.completed.includes('the-family-text')}/>}
+    <footer className="site-footer"><div className="container footer-inner"><div className="footer-brand"><span className="brand-mark mini"><Eye size={19}/></span><span>SECOND LOOK LAB</span></div><p>Better questions. Better judgment. More perspective.</p><span>© {new Date().getFullYear()} Second Look Lab · Interactive prototype v0.5</span></div></footer>
+    {activeScenario && <ScenarioExperience key={activeScenario.id} scenario={activeScenario} onClose={() => setActiveScenario(null)} onNext={openNext} onComplete={journey.markCompleted} alreadyCompleted={journey.completed.includes(activeScenario.id as ExperienceId)} focusMode={journey.focusMode}/>}
+    {showMessageSimulation && <MessageSimulation onClose={() => setShowMessageSimulation(false)} onExplore={() => { setShowMessageSimulation(false); window.requestAnimationFrame(() => go('stories')) }} onComplete={() => journey.markCompleted('the-family-text')} alreadyCompleted={journey.completed.includes('the-family-text')} focusMode={journey.focusMode}/>}
   </>
 }
 
