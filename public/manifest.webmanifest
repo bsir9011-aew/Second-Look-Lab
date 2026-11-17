@@ -1,0 +1,47 @@
+{
+  "id": "./",
+  "name": "Second Look Lab",
+  "short_name": "Second Look",
+  "description": "Short interactive decisions, scams and playful challenges. Decide, detect and play.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f9faf4",
+  "theme_color": "#123f3b",
+  "categories": [
+    "education",
+    "games",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explore the Lab",
+      "short_name": "Challenges",
+      "description": "Discover a new interactive challenge.",
+      "url": "./?launch=stories"
+    },
+    {
+      "name": "My Dossier",
+      "short_name": "Dossier",
+      "description": "See your discoveries and progress.",
+      "url": "./?launch=dossier"
+    }
+  ]
+}
