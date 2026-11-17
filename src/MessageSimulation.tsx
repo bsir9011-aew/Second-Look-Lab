@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Clock3, Eye, LockKeyhole, MessageCircle, Phone, RefreshCw, ShieldCheck, X } from 'lucide-react'
 import './message-simulation.css'
+import { XP_PER_EXPERIENCE } from './labJourney'
 
 type Phase = 'inbox' | 'clue' | 'verify' | 'outcome'
 type FirstAction = 'transfer' | 'question' | 'call'
@@ -46,12 +47,15 @@ const finalConsequences: Record<FinalAction, { title: string; text: string; tone
 type Props = {
   onClose: () => void
   onExplore: () => void
+  onComplete: () => void
+  alreadyCompleted: boolean
 }
 
-export default function MessageSimulation({ onClose, onExplore }: Props) {
+export default function MessageSimulation({ onClose, onExplore, onComplete, alreadyCompleted }: Props) {
   const [phase, setPhase] = useState<Phase>('inbox')
   const [firstAction, setFirstAction] = useState<FirstAction | null>(null)
   const [finalAction, setFinalAction] = useState<FinalAction | null>(null)
+  const [earnedThisRun, setEarnedThisRun] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   const phases: Phase[] = ['inbox', 'clue', 'verify', 'outcome']
@@ -77,8 +81,13 @@ export default function MessageSimulation({ onClose, onExplore }: Props) {
 
   useEffect(() => { if (dialogRef.current) dialogRef.current.scrollTop = 0 }, [phase])
 
-  const reset = () => { setFirstAction(null); setFinalAction(null); setPhase('inbox') }
-  const finish = () => { if (finalAction !== null) setPhase('outcome') }
+  const reset = () => { setFirstAction(null); setFinalAction(null); setEarnedThisRun(false); setPhase('inbox') }
+  const finish = () => {
+    if (finalAction === null) return
+    setEarnedThisRun(!alreadyCompleted)
+    onComplete()
+    setPhase('outcome')
+  }
 
   return (
     <div className="message-overlay" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}>
@@ -151,6 +160,7 @@ export default function MessageSimulation({ onClose, onExplore }: Props) {
               </>}
               {phase === 'outcome' && finalAction !== null && <>
                 <div className={'message-result-tag ' + finalConsequences[finalAction].tone}><ShieldCheck size={16}/>{finalAction === 'verify' ? 'SAFER RESPONSE' : 'RISK TO RECONSIDER'}</div>
+                <div className={'journey-earned' + (earnedThisRun ? '' : ' replayed')}><Check size={14}/>{earnedThisRun ? '+' + XP_PER_EXPERIENCE + ' discovery XP · New experience' : 'Previously explored · No repeat XP'}</div>
                 <h2 id="message-dialog-title">{finalConsequences[finalAction].title}</h2>
                 <p>{finalConsequences[finalAction].text}</p>
                 <div className="message-action-path"><span>PRESSURE</span><ArrowRight size={14}/><span>IDENTITY CLAIM</span><ArrowRight size={14}/><strong>INDEPENDENT VERIFICATION</strong></div>
