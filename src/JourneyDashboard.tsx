@@ -51,7 +51,7 @@ export default function JourneyDashboard({
             {LEVELS.map((rank,i) => <span key={rank.name} className={i <= stats.level ? 'earned' : ''} title={'Level ' + i + ': ' + rank.name} aria-label={'Level ' + i + ': ' + rank.name + (i <= stats.level ? ', reached' : ', locked')}>{i}</span>)}
           </div>
           <div className="journey-completions">
-            <div className="journey-completions-head"><strong>EXPLORER'S COLLECTION</strong><span>{stats.completed} / {stats.total} unique</span></div>
+            <div className="journey-completions-head"><strong>EXPLORER'S COLLECTION</strong><span>{stats.completedCount} / {stats.total} unique</span></div>
             <div className="journey-experience-grid">
               {EXPERIENCE_IDS.map(id => <span key={id} className={completed.includes(id) ? 'journey-done' : ''}>
                 {completed.includes(id) ? <Check size={13} aria-hidden="true"/> : <span className="journey-unseen" aria-hidden="true"/>}
